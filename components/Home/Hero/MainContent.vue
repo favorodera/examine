@@ -8,7 +8,7 @@
         #1 Assessment Management Platform
       </p>
 
-      <h1 class="text-center text-2xl font-bold sm:text-4xl lg:text-6xl xl:text-8xl">
+      <h1 class="text-center text-2xl font-bold sm:text-4xl lg:text-7xl">
 
         Innovating <span class="text-gray">Assessment</span>
         <br>
@@ -16,7 +16,7 @@
 
       </h1>
 
-      <p class="max-w-[60rem] text-center text-lg lg:text-2xl font-semibold opacity-80">
+      <p class="max-w-[60rem] text-center text-lg lg:text-xl font-semibold opacity-80">
         Examine helps you manage examinations and assessments effectively, ensuring a smoother experience for students
         and educator.
       </p>

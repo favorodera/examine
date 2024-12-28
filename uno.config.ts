@@ -6,7 +6,6 @@ export default defineConfig({
   ],
   theme: {},
   safelist: [
-    // ...
   ],
   extendTheme: (theme) => {
     return {

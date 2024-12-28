@@ -1,6 +1,6 @@
 <template>
 
-  <nav class="w-full max-w-[90rem] flex items-center justify-between p-4 bg-transparent backdrop-blur-2xl sticky top-0 sm:p-12">
+  <nav class="w-full max-w-[90rem] flex items-center justify-between p-4 bg-[#0D0D0D] sticky top-0 sm:p-12 z-1">
 
     <div class="w-max flex gap-1 items-end">
 
@@ -14,9 +14,18 @@
 
     <div class="w-max flex gap-4 items-center hidden break:flex">
 
-      <HomeHeroNavLink label="Benefits" />
-      <HomeHeroNavLink label="How It Works" />
-      <HomeHeroNavLink label="Pricing" />
+      <HomeHeroNavLink
+        label="Benefits"
+        url="#benefits"
+      />
+      <HomeHeroNavLink
+        label="How It Works"
+        url="#benefits"
+      />
+      <HomeHeroNavLink
+        label="Pricing"
+        url="#benefits"
+      />
 
     </div>
 
