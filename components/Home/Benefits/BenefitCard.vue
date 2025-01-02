@@ -1,10 +1,10 @@
 <template>
 
-  <div class=" w-full flex flex-col gap-5 p-2 pb-7 bg-[#171717] rounded-10 ">
+  <div class=" w-full flex flex-col gap-5 p-2 pb-7 bg-elevate rounded-10 ">
 
     <div class="w-full h-[13.875rem] bg-black flex items-center justify-center rounded-t-8">
 
-      <div class="bg-[#171717] p-6 rounded-6">
+      <div class="bg-elevate p-6 rounded-6">
 
         <span
           :class="icon"

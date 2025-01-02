@@ -1,0 +1,204 @@
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "user_id": "id",
+    "assessments": [
+        {
+            "name": "Assessment 1",
+            "date": "01/01/25",
+            "period_mins": 60,
+            "marks_obtainable": 100,
+            "remarks_meter": {
+                "pass_fail": {
+                    "pass": 60,
+                    "fail": 30
+                },
+                "lettering": {
+                    "a+": 90,
+                    "a": 80,
+                    "b": 70,
+                    "c": 60,
+                    "d": 50,
+                    "f": 30
+                }
+                
+            },
+            "ended": false,
+            "access_code": "access123",
+            "questions": [
+                {
+                    "question": "What is a computer?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "A name of person",
+                        "b": "A name of place",
+                        "c": "A name of animal",
+                        "d": "A machine that accepts data, processes it and outputs information"
+                    }
+                },
+                {
+                    "question": "What is the capital of France?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Berlin",
+                        "b": "Madrid",
+                        "c": "Paris",
+                        "d": "Rome"
+                    }
+                },
+                {
+                    "question": "What is 2 + 2?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "3",
+                        "b": "4",
+                        "c": "5",
+                        "d": "6"
+                    }
+                },
+                {
+                    "question": "What is the boiling point of water?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "100 degrees Celsius",
+                        "b": "90 degrees Celsius",
+                        "c": "80 degrees Celsius",
+                        "d": "70 degrees Celsius"
+                    }
+                },
+                {
+                    "question": "What planet is known as the Red Planet?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Earth",
+                        "b": "Mars",
+                        "c": "Jupiter",
+                        "d": "Saturn"
+                    }
+                },
+                {
+                    "question": "Who wrote 'Hamlet'?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Charles Dickens",
+                        "b": "Mark Twain",
+                        "c": "William Shakespeare",
+                        "d": "Jane Austen"
+                    }
+                },
+                {
+                    "question": "What is the largest ocean on Earth?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Atlantic Ocean",
+                        "b": "Indian Ocean",
+                        "c": "Arctic Ocean",
+                        "d": "Pacific Ocean"
+                    }
+                },
+                {
+                    "question": "What is the chemical symbol for gold?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Au",
+                        "b": "Ag",
+                        "c": "Fe",
+                        "d": "Pb"
+                    }
+                },
+                {
+                    "question": "What is the speed of light?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "300,000 km/s",
+                        "b": "150,000 km/s",
+                        "c": "450,000 km/s",
+                        "d": "600,000 km/s"
+                    }
+                },
+                {
+                    "question": "What is the hardest natural substance on Earth?",
+                    "answer_mode": "options",
+                    "options": {
+                        "a": "Gold",
+                        "b": "Iron",
+                        "c": "Diamond",
+                        "d": "Ruby"
+                    }
+                }
+            ],
+            "candidates": [
+                {
+                    "name": "Candidate 1",
+                    "email": "candidate1@example.com",
+                    "score": 80,
+                    "time_spent_mins": 30,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 2",
+                    "email": "candidate2@example.com",
+                    "score": 70,
+                    "time_spent_mins": 25,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 3",
+                    "email": "candidate3@example.com",
+                    "score": 60,
+                    "time_spent_mins": 35,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 4",
+                    "email": "candidate4@example.com",
+                    "score": 90,
+                    "time_spent_mins": 40,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 5",
+                    "email": "candidate5@example.com",
+                    "score": 85,
+                    "time_spent_mins": 28,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 6",
+                    "email": "candidate6@example.com",
+                    "score": 75,
+                    "time_spent_mins": 32,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 7",
+                    "email": "candidate7@example.com",
+                    "score": 95,
+                    "time_spent_mins": 45,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 8",
+                    "email": "candidate8@example.com",
+                    "score": 55,
+                    "time_spent_mins": 20,
+                    "remark": "fail"
+                },
+                {
+                    "name": "Candidate 9",
+                    "email": "candidate9@example.com",
+                    "score": 65,
+                    "time_spent_mins": 22,
+                    "remark": "pass"
+                },
+                {
+                    "name": "Candidate 10",
+                    "email": "candidate10@example.com",
+                    "score": 50,
+                    "time_spent_mins": 18,
+                    "remark": "fail"
+                }
+            ]
+        }
+    ]
+}

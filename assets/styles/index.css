@@ -1,14 +1,14 @@
 @import '@unocss/reset/tailwind.css';
 
-@import url(https://fonts.bunny.net/css?family=montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i);
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
   background-color: #0D0D0D;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Ubuntu", serif;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   min-height: 100vh;
   min-width: 100%;
@@ -16,14 +16,21 @@ body {
 }
 
 #app {
-  min-width: 100%;
+  width: clamp(15rem, 100%, 90rem);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
 }
 
+.layout-enter-active,
+.layout-leave-active ,
 .page-enter-active,
 .page-leave-active {
   transition: all 1s ease;
 }
 
+.layout-enter-from,
+.layout-leave-to,
 .page-enter-from,
 .page-leave-to {
   opacity: 0;

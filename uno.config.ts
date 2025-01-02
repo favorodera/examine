@@ -14,6 +14,11 @@ export default defineConfig({
         ...theme.breakpoints,
         break: '999px',
       },
+      colors: {
+        ...theme.colors,
+        background: '#0D0D0D',
+        elevate: '#171717',
+      },
     }
   },
   presets: [

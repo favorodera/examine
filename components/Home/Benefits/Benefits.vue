@@ -2,12 +2,12 @@
 
   <section
     id="benefits"
-    class="w-full max-w-[90rem] flex flex-col items-center justify-center gap-12 p-4 sm:p-12"
+    class="w-full flex flex-col items-center justify-center gap-8"
   >
 
     <div class="flex flex-col items-center gap-6">
 
-      <p class="px-4 py-2 text-center text-sm font-semibold text-blue-500 rounded-4 bg-[#171717] w-max">
+      <p class="px-4 py-2 text-center text-sm font-semibold text-blue-500 rounded-4 bg-elevate w-max">
         Why Choose Examine?
       </p>
 
@@ -16,11 +16,6 @@
         Key Benefits <span class="text-gray">of Using</span> Examine
 
       </h1>
-
-      <p class="text-center text-sm lg:text-xl font-semibold opacity-80 max-w-[45rem]">
-        Examine streamlines the assessment process, enabling educators and organizations to easily design and manage
-        examinations for a smooth experience.
-      </p>
 
     </div>
 

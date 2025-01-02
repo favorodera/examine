@@ -1,10 +1,10 @@
 <template>
 
-  <section class="w-full max-w-[90rem] flex flex-col items-center justify-center gap-12 p-4 sm:p-12">
+  <section class="w-full flex flex-col items-center justify-center gap-8">
 
     <div class="flex flex-col items-center gap-6">
 
-      <p class="px-4 py-2 text-center text-sm font-semibold text-blue-500 rounded-4 bg-[#171717] w-max">
+      <p class="px-4 py-2 text-center text-sm font-semibold text-blue-500 rounded-4 bg-elevate w-max">
         #1 Assessment Management Platform
       </p>
 
@@ -16,16 +16,16 @@
 
       </h1>
 
-      <p class="max-w-[60rem] text-center text-lg lg:text-xl font-semibold opacity-80">
-        Examine helps you manage examinations and assessments effectively, ensuring a smoother experience for students
-        and educator.
+      <p class="text-center text-lg font-semibold opacity-80">
+        Manage your assessments or examinations efficiently and in the better way with Examine.
       </p>
 
     </div>
 
     <button
       type="button"
-      class="bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg transition-background-color duration-500"
+      class="bg-blue-500 hover:bg-blue-600 font-semibold px-4 py-2 rounded-lg transition-background-color duration-500"
+      @click="navigateTo('/auth')"
     >
       Get Started
     </button>
