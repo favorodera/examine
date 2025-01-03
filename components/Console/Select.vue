@@ -8,13 +8,13 @@
   >
 
     <div
-      class="selected-value bg-elevate text-sm font-normal p-2 b b-gray rounded-md cursor-pointer flex items-center justify-between"
+      class="selected-value bg-white text-sm font-normal p-2 b b-brand-gray rounded-md cursor-pointer flex items-center justify-between"
       @click="toggleDropdown"
     >
-      <span class="truncate font-semibold">{{ modelValue }}</span>
+      <span class="truncate font-semibold text-brand-dark">{{ modelValue }}</span>
 
       <i
-        class="i-hugeicons-arrow-down-01 size-5 property-transform duration-200 ease"
+        class="i-hugeicons-arrow-down-01 size-5 property-transform duration-200 ease text-brand-gray"
         :class="{ 'transform rotate-180': isOpen }"
       />
 
@@ -31,23 +31,23 @@
 
       <div
         v-if="isOpen"
-        class="p-2 absolute w-full mt-1 flex flex-col gap-2 bg-elevate b b-gray rounded-md shadow-lg z-50"
+        class="p-2 absolute w-full mt-1 flex flex-col gap-2 bg-white b b-brand-gray rounded-md z-1"
       >
 
         <div
           v-for="option in options"
           :key="option"
-          class="p-1.5 flex items-center justify-between gap-2 cursor-pointer hover:bg-gray/10 transition-colors  rounded-md"
-          :class="{ 'bg-gray/20': option === modelValue }"
+          class="p-1.5 flex items-center justify-between gap-2 cursor-pointer hover:bg-brand-gray/50 transition-colors  rounded-md"
+          :class="{ 'bg-brand-gray/70': option === modelValue }"
           @click="selectOption(option)"
         >
-          <p class="truncate text-sm font-semibold">
+          <p class="truncate text-sm font-semibold text-brand-dark">
             {{ option }}
           </p>
 
           <i
             v-if="option === modelValue"
-            class="i-hugeicons-tick-02 size-5"
+            class="i-hugeicons-tick-02 size-5 text-brand-dark"
           />
         </div>
 

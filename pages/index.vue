@@ -1,10 +1,12 @@
 <template>
 
-  <main class="w-full flex flex-col flex-[1_1_auto] gap-12">
+  <main class="w-full flex flex-col flex-[1_1_auto]">
 
-    <HomeHeroNav />
-    <HomeHeroMainContent />
+    <HomeNav />
+    <HomeHero />
     <HomeBenefits />
+    <HomeHowItWorks />
+    <HomeFooter />
 
   </main>
 

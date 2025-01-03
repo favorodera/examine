@@ -1,20 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from '@primevue/themes/aura'
-
 export default defineNuxtConfig({
   modules: [
     '@unocss/nuxt',
     '@nuxt/eslint',
-    '@pinia/nuxt',
-    '@primevue/nuxt-module',
     '@nuxtjs/supabase',
-    'pinia-plugin-persistedstate/nuxt',
   ],
   ssr: true,
   imports: {
     dirs: [
       'composables/**',
-      'stores/**',
       'utils/**',
     ],
   },
@@ -26,8 +20,14 @@ export default defineNuxtConfig({
       },
       link: [
         {
+          rel: 'preload',
+          as: 'image',
+          href: '/images/hero-image.png',
+        },
+        {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap',
+          as: 'font',
+          href: 'https://fonts.googleapis.com/css2?family=Palanquin:wght@100;200;300;400;500;600;700&display=swap',
         },
         {
           rel: 'preconnect',
@@ -57,18 +57,6 @@ export default defineNuxtConfig({
   eslint: {
     config: {
       stylistic: true,
-    },
-  },
-  primevue: {
-    autoImport: true,
-    options: {
-      ripple: true,
-      theme: {
-        preset: Aura,
-        options: {
-          cssLayer: true,
-        },
-      },
     },
   },
   supabase: {

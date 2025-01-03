@@ -1,12 +1,10 @@
 <template>
 
-  <NuxtLoadingIndicator color="blue" />
+  <NuxtLoadingIndicator color="green" />
 
-  <main class="w-full flex flex-col flex-[1_1_auto] px-4 sm-px-12">
+  <main class="w-full flex flex-col flex-[1_1_auto] ">
 
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <NuxtPage />
 
   </main>
 

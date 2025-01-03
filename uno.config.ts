@@ -16,8 +16,12 @@ export default defineConfig({
       },
       colors: {
         ...theme.colors,
-        background: '#0D0D0D',
-        elevate: '#171717',
+        brand: {
+          background: '#f2f2f2',
+          green: '#32bc9b',
+          gray: '#979797',
+          dark: '#030303',
+        },
       },
     }
   },

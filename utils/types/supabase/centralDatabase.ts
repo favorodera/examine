@@ -1,7 +1,8 @@
 type Assessment = {
   name: string
-  date: string
-  period_mins: number
+  date_time: string
+  id: string
+  duration_mins: number
   marks_obtainable: number
   remarks_meter: {
     pass_fail: {
@@ -17,7 +18,7 @@ type Assessment = {
       'f': number
     }
   }
-  status: 'upcoming' | 'ongoing' | 'ended'
+  status: 'upcoming' | 'ongoing' | 'completed'
   access_code: string
   questions: {
     question: string
