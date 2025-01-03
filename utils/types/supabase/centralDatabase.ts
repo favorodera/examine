@@ -5,18 +5,8 @@ type Assessment = {
   duration_mins: number
   marks_obtainable: number
   remarks_meter: {
-    pass_fail: {
-      pass: number
-      fail: number
-    }
-    lettering: {
-      'a+': number
-      'a': number
-      'b': number
-      'c': number
-      'd': number
-      'f': number
-    }
+    pass: number
+    fail: number
   }
   status: 'upcoming' | 'ongoing' | 'completed'
   access_code: string
@@ -32,7 +22,7 @@ type Assessment = {
     email: string
     score: number
     time_spent_mins: number
-    remark: string
+    remark: 'pass' | 'fail'
   }[]
 }
 

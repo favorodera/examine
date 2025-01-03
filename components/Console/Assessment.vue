@@ -1,124 +1,82 @@
 <template>
 
-  <div class="w-full flex flex-col gap-12">
+  <section class="w-full max-w-[90rem] px-4 self-center">
 
-    <div class="flex flex-col gap-2">
-      <h1 class="text-xl font-semibold line-clamp-2">
-        {{ name }}
-      </h1>
-      
-      <div class="flex items-center gap-2">
+    <div class="w-full grid grid-cols-[repeat(auto-fit,minmax(min(100%,27rem),1fr))] gap-8 grid-justify-items-center">
 
-        <p class="text-gray text-xs line-clamp-1 font-semibold tracking-wider">
-          ACCESS CODE: {{ accessCode }}
+      <div class="container bg-white rounded-3.5 p-8 flex flex-col gap-3">
+
+        <h1 class="text-5 text-brand-dark font-medium">
+          Overall Score
+        </h1>
+        <p class="text-2xl text-brand-green font-bold">
+          {{ overallScore }}%
         </p>
-
-        <button
-          type="button"
-          class="hover:scale-110"
-          @click="copyToClipboard(accessCode)"
-        >
-          <span class="i-hugeicons:copy-02 size-4" />
-        </button>
-      </div>
-
-    </div>
-
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,25rem),1fr))] gap-4">
-
-      <div class="w-full flex flex-col gap-2 text-gray text-sm line-clamp-1 font-semibold">
-        <p class="text-base text-white">
-          BEST CANDIDATE
-        </p>
-
-        <p>NAME: {{ bestCandidateName }}</p>
-            
-        <div class="flex items-center gap-2">
-          <p>EMAIL: {{ bestCandidateEmail }}</p>
-          <button
-            type="button"
-            class="hover:scale-110"
-            @click="copyToClipboard(bestCandidateEmail)"
-          >
-            <span class="i-hugeicons:copy-02 size-4" />
-          </button>
-        </div>
-
-        <p>SCORE: {{ bestCandidateScore }}</p>
-
-        <p>TIME SPENT: {{ bestCandidateTimeSpent }} mins.</p>
 
       </div>
 
-      <div class="w-full flex flex-col gap-2 text-gray text-sm line-clamp-1 font-semibold">
-        <p class="text-base text-white">
-          WORST CANDIDATE
+      <div class="container bg-white rounded-3.5 p-8 flex flex-col gap-3">
+
+        <h1 class="text-5 text-brand-dark font-medium">
+          Number of Candidates
+        </h1>
+        <p class="text-2xl text-brand-green font-bold">
+          {{ numberOfCandidates }}
         </p>
-
-        <p>NAME: {{ worstCandidateName }}</p>
-            
-        <div class="flex items-center gap-2">
-          <p>EMAIL: {{ worstCandidateEmail }}</p>
-          <button
-            type="button"
-            class="hover:scale-110"
-            @click="copyToClipboard(worstCandidateEmail)"
-          >
-            <span class="i-hugeicons:copy-02 size-4" />
-          </button>
-        </div>
-
-        <p>SCORE: {{ worstCandidateScore }}</p>
-
-        <p>TIME SPENT: {{ worstCandidateTimeSpent }} mins.</p>
 
       </div>
 
-      <div class="w-full flex flex-col gap-2 text-gray text-sm line-clamp-1 font-semibold">
-        <p class="text-base text-white">
-          PERFORMANCE STATS.
+      <div class="container bg-white rounded-3.5 p-8 flex flex-col gap-3">
+
+        <h1 class="text-5 text-brand-dark font-medium">
+          Average Score
+        </h1>
+        <p class="text-2xl text-brand-green font-bold">
+          {{ averageScore }}%
         </p>
 
-        <p>NO OF CANDIDATES: {{ worstCandidateName }}</p>
-            
-        <div class="flex items-center gap-2">
-          <p>PASSED: {{ worstCandidateEmail }}</p>
-          <button
-            type="button"
-            class="hover:scale-110"
-            @click="copyToClipboard(worstCandidateEmail)"
-          >
-            <span class="i-hugeicons:copy-02 size-4" />
-          </button>
-        </div>
+      </div>
 
-        <p>FAILED: {{ worstCandidateScore }}</p>
+      <div class="container bg-white rounded-3.5 p-8 flex flex-col gap-3">
 
-        <p>AVERAGE SCORE: {{ worstCandidateTimeSpent }} mins.</p>
+        <h1 class="text-5 text-brand-dark font-medium">
+          Passed Candidates
+        </h1>
+        <p class="text-2xl text-brand-green font-bold">
+          {{ passedCandidates }}
+        </p>
+
+      </div>
+
+      <div class="container bg-white rounded-3.5 p-8 flex flex-col gap-3">
+
+        <h1 class="text-5 text-brand-dark font-medium">
+          Failed Candidates
+        </h1>
+        <p class="text-2xl text-brand-red font-bold">
+          {{ failedCandidates }}
+        </p>
 
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  name: string
-  accessCode: string
-  bestCandidateName: string
-  bestCandidateEmail: string
-  bestCandidateScore: number
-  bestCandidateTimeSpent: number
-  worstCandidateName: string
-  worstCandidateEmail: string
-  worstCandidateScore: number
-  worstCandidateTimeSpent: number
+  overallScore: number
+  numberOfCandidates: number
+  averageScore: number
+  passedCandidates: number
+  failedCandidates: number
 }>()
-
-const copyToClipboard = (item: string) => {
-  window.navigator.clipboard.writeText(item)
-}
 </script>
+
+<style scoped lang="css">
+.container {
+  box-shadow: rgba(3, 3, 3, 0.1) 0px 0px 9px
+}
+</style>
