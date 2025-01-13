@@ -1,0 +1,38 @@
+@import '@unocss/reset/tailwind.css';
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f2f2f2;
+  font-family: "Palanquin", serif;
+  color: #030303;
+}
+
+.modal {
+  scrollbar-width: none;
+}
+
+.shadowed {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px 0px;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  display: none;
+}
+
+.layout-enter-active,
+.layout-leave-active,
+.page-enter-active,
+.page-leave-active {
+  transition: all 1s ease;
+}
+
+.layout-enter-from,
+.layout-leave-to,
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}

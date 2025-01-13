@@ -1,0 +1,30 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --fix",
+    "stage": "npm run lint && npm run build && git add ."
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^0.7.4",
+    "@nuxtjs/supabase": "^1.4.5",
+    "@unocss/nuxt": "^0.65.3",
+    "@unocss/reset": "^0.65.3",
+    "eslint": "^9.17.0",
+    "nuxt": "^3.15.0",
+    "unocss": "^0.65.3",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@iconify-json/hugeicons": "^1.2.3",
+    "@unocss/eslint-config": "^65.4.0",
+    "supabase": "^2.2.1"
+  }
+}
