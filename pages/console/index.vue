@@ -13,7 +13,7 @@
             class="flex items-center gap-1"
           >
             <span class="i-hugeicons:school-report-card size-8 text-brand-green" />
-            <p class="text-lg font-bold">Examine</p>
+            <p class="text-lg font-semibold">Examine</p>
 
           </NuxtLink>
 
@@ -52,13 +52,13 @@
 
             <span class="i-hugeicons:alert-02 size-8" />
 
-            <p class="text-xl font-bold">
+            <p class="text-xl font-semibold">
               Error Fetching Assessments
             </p>
 
             <button
               type="button"
-              class="rounded-md bg-brand-green px-3 py-1 text-white font-semibold transition-background-color duration-500 hover:bg-brand-green/70"
+              class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
               @click="refresh()"
             >
               Retry
@@ -77,7 +77,7 @@
 
             <span class="i-hugeicons:reload size-8 animate-spin" />
 
-            <p class="text-xl font-bold">
+            <p class="text-xl font-semibold">
               Fetching Assessments...
             </p>
 

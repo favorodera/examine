@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
       name,
       id: name.replace(/\s+/g, '-').toLowerCase(),
       access_code: accessCode,
-      date_time: dateTime,
+      date_time: `${dateTime.split('T')[0].split('-')[2]}-${dateTime.split('T')[0].split('-')[1]}-${dateTime.split('T')[0].split('-')[0]}T${dateTime.split('T')[1].split('.')[0]}`,
       duration_mins: duration,
       marks_obtainable: marksObtainable,
       pass_mark: passMark,

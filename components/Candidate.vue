@@ -6,17 +6,17 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Bio
         </h1>
 
         <div class="flex flex-col gap-2">
 
-          <p class="line-clamp-1 text-lg font-semibold">
+          <p class="line-clamp-1 text-lg font-medium">
             Name: {{ candidate.name }}
           </p>
 
-          <p class="text-lg font-semibold">
+          <p class="text-lg font-medium">
             ID: {{ candidate.id }}
           </p>
 
@@ -25,10 +25,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Score
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ candidate.score }}%
         </p>
 
@@ -36,10 +36,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Number of Questions
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ questions.length }}
         </p>
 
@@ -47,10 +47,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Correct
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ candidate.answers.filter(answer => answer.status === 'correct').length }}
         </p>
 
@@ -58,10 +58,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Incorrect
         </h1>
-        <p class="text-lg text-red-500 font-semibold">
+        <p class="text-lg text-red-500 font-medium">
           {{ candidate.answers.filter(answer => answer.status === 'incorrect').length }}
         </p>
 
@@ -69,11 +69,11 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Remark
         </h1>
         <p
-          class="text-lg font-semibold capitalize"
+          class="text-lg font-medium capitalize"
           :class="{
             'text-red-500': candidate?.remark === 'fail',
             'text-brand-green': candidate?.remark === 'pass',
@@ -90,11 +90,11 @@
       
       <div class="w-full flex items-center justify-between gap-4">
 
-        <p class="text-xl font-bold">
+        <p class="text-xl font-semibold">
           Answers
         </p>
 
-        <p class="text-xl font-bold">
+        <p class="text-xl font-semibold">
           Time Spent: {{ candidate.time_spent_mins }} mins
         </p>
 
@@ -108,7 +108,7 @@
             :key="answer.question_id"
             class="shadowed relative w-full flex flex-col gap-3 rounded-3.5 bg-white p-8"
           >
-            <h1 class="text-5 font-medium">
+            <h1 class="text-5 font-normal">
               {{ answer.question_id }}. {{ questions[answer.question_id].question }} ({{ questions[answer.question_id].marks_obtainable }} marks)
             </h1>
         
@@ -116,7 +116,7 @@
               <li
                 v-for="(option, PropertyKey) in questions[answer.question_id].options"
                 :key="PropertyKey"
-                class="ml-4 font-bold"
+                class="ml-4 font-semibold"
                 :class="{
                   'text-brand-green': PropertyKey.toString().toUpperCase() === questions[answer.question_id].correct_option,
                   'text-red-500': PropertyKey.toString().toUpperCase() === answer.option_selected && answer.status === 'incorrect',
@@ -172,7 +172,7 @@
 
         <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
           <span class="i-hugeicons:database size-8" />
-          <p class="text-sm font-bold">
+          <p class="text-sm font-semibold">
             No Answer Found
           </p>
         </div>
@@ -192,7 +192,7 @@
 
       <span class="i-hugeicons:database size-8 op-40" />
 
-      <p class="text-xl font-bold op-40">
+      <p class="text-xl font-semibold op-40">
         Candidate not Found
       </p>
 

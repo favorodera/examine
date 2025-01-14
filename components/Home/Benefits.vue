@@ -5,7 +5,7 @@
     class="mt-12 w-full flex flex-col items-center justify-center gap-12 p-4"
   >
 
-    <h1 class="text-center text-2xl text-brand-green font-bold">
+    <h1 class="text-center text-2xl text-brand-green font-semibold">
 
       Key Benefits
 

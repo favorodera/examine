@@ -10,15 +10,15 @@
         @click="copyAssessmentUrl"
       >
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Access Code
         </h1>
-        <p class="text-lg font-semibold">
+        <p class="text-lg font-medium">
           {{ assessment?.access_code }}
         </p>
 
         <p
-          class="absolute right-4 top-2 text-xs font-semibold"
+          class="absolute right-4 top-2 text-xs font-medium"
           :class="{
             'text-brand-green': isAccessCodeCopied,
           }"
@@ -35,10 +35,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Overall Score
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ assessment.marks_obtainable }}%
         </p>
 
@@ -46,10 +46,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Number of Candidates
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ assessment.candidates.length }}
         </p>
 
@@ -57,10 +57,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Average Score
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ averageScore.toFixed(2) }}%
         </p>
 
@@ -68,10 +68,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Passed Candidates
         </h1>
-        <p class="text-lg text-brand-green font-semibold">
+        <p class="text-lg text-brand-green font-medium">
           {{ assessment.candidates.filter(candidate => candidate.remark === 'pass').length }}
         </p>
 
@@ -79,10 +79,10 @@
 
       <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-        <h1 class="text-xl font-bold">
+        <h1 class="text-xl font-semibold">
           Failed Candidates
         </h1>
-        <p class="text-lg text-red-500 font-semibold">
+        <p class="text-lg text-red-500 font-medium">
           {{ assessment.candidates.filter(candidate => candidate.remark === 'fail').length }}
         </p>
 
@@ -92,11 +92,11 @@
 
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-          <h1 class="text-xl font-bold">
+          <h1 class="text-xl font-semibold">
             Best Candidate
           </h1>
 
-          <div class="flex flex-col gap-2 text-lg font-bold">
+          <div class="flex flex-col gap-2 text-lg font-semibold">
 
             <p class="line-clamp-1">
               Name: {{ bestCandidate?.name }}
@@ -120,11 +120,11 @@
 
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-          <h1 class="text-xl font-bold">
+          <h1 class="text-xl font-semibold">
             Best Candidate
           </h1>
 
-          <div class="flex flex-col gap-2 text-lg font-bold">
+          <div class="flex flex-col gap-2 text-lg font-semibold">
 
             <p class="line-clamp-1">
               Name: {{ worstCandidate?.name }}
@@ -152,7 +152,7 @@
 
     <section class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
-      <p class="text-xl font-bold">
+      <p class="text-xl font-semibold">
         Candidates Table
       </p>
 
@@ -176,7 +176,7 @@
       
       <div class="w-full flex items-center justify-between gap-4">
 
-        <p class="text-xl font-bold">
+        <p class="text-xl font-semibold">
           Questions
         </p>
 
@@ -199,7 +199,7 @@
             :key="question.id"
             class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-4"
           >
-            <h1 class="text-5 font-medium">
+            <h1 class="text-5 font-normal">
               {{ question.id }}. {{ question.question }} ({{ question.marks_obtainable }} marks)
             </h1>
         
@@ -207,7 +207,7 @@
               <li
                 v-for="(option, PropertyKey) in question.options"
                 :key="PropertyKey"
-                class="ml-4 font-bold"
+                class="ml-4 font-semibold"
                 :class="{
                   'text-brand-green': PropertyKey.toString().toUpperCase() === question.correct_option,
                 }"
@@ -250,8 +250,8 @@
 
         <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
           <span class="i-hugeicons:database size-8" />
-          <p class="text-sm font-bold">
-            No Candidate Found
+          <p class="text-sm font-semibold">
+            No Question Found
           </p>
         </div>
       </template>
@@ -270,13 +270,13 @@
 
       <span class="i-hugeicons:database size-8 op-40" />
 
-      <p class="text-xl font-bold op-40">
+      <p class="text-xl font-semibold op-40">
         Assessment not Found
       </p>
 
       <button
         type="button"
-        class="rounded-md bg-brand-green px-3 py-1 text-white font-semibold transition-background-color duration-500 hover:bg-brand-green/70"
+        class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
         @click="navigateTo('/console')"
       >
         Back to Console

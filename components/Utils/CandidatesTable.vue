@@ -167,7 +167,7 @@
             <td colspan="5">
               <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
                 <span class="i-hugeicons:database size-8" />
-                <p class="text-sm font-bold">
+                <p class="text-sm font-semibold">
                   No Candidate Found
                 </p>
               </div>

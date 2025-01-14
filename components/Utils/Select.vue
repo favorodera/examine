@@ -11,7 +11,7 @@
       class="selected-value flex cursor-pointer items-center justify-between b b-brand-gray rounded-md bg-white p-2 text-sm font-normal"
       @click="toggleDropdown"
     >
-      <span class="truncate font-semibold">{{ modelValue }}</span>
+      <span class="truncate font-medium">{{ modelValue }}</span>
   
       <i
         class="i-hugeicons-arrow-down-01 size-5 text-brand-gray duration-200 ease property-transform"
@@ -41,7 +41,7 @@
           :class="{ 'bg-brand-gray/70': option === modelValue }"
           @click="selectOption(option)"
         >
-          <p class="truncate text-sm font-semibold">
+          <p class="truncate text-sm font-medium">
             {{ option }}
           </p>
   

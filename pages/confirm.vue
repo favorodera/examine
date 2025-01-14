@@ -14,7 +14,7 @@
           }"
         />
 
-        <p class="text-center text-2xl font-bold">
+        <p class="text-center text-2xl font-semibold">
           {{ user ? 'Authentication Successful' : 'Confirming Authentication' }}
         </p>
 

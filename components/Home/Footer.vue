@@ -11,7 +11,7 @@
           class="flex items-center gap-1"
         >
           <span class="i-hugeicons:school-report-card size-8 text-brand-green" />
-          <p class="text-lg font-bold">Examine</p>
+          <p class="text-lg font-semibold">Examine</p>
 
         </NuxtLink>
 

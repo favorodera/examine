@@ -18,7 +18,7 @@
         class="flex items-center gap-1"
       >
         <span class="i-hugeicons:school-report-card size-8 text-brand-green" />
-        <p class="text-lg font-bold">
+        <p class="text-lg font-semibold">
           Examine
         </p>
   
@@ -34,7 +34,7 @@
   
           <button
             type="button"
-            class="w-max flex items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-medium duration-500 ease property-background-color hover:bg-brand-green/80"
+            class="w-max flex items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-normal duration-500 ease property-background-color hover:bg-brand-green/80"
             @click="google()"
           >
             <span class="i-hugeicons:google size-5" />
@@ -78,7 +78,7 @@
       <button
         type="submit"
         :disabled="magicLinkStatus === 'sending' || magicLinkStatus === 'sent'"
-        class="w-max flex flex-col items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-medium duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
+        class="w-max flex flex-col items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
       >
         <div class="flex items-center gap-2">
           {{ magicLinkStatus === 'sent' ? `Magic Link Sent` : magicLinkStatus === 'sending' ? 'Sending...' : 'Send Magic Link' }}

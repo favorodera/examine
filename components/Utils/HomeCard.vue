@@ -7,7 +7,7 @@
       class="size-8 text-brand-green"
     />
 
-    <p class="text-center text-lg text-brand-green font-medium">
+    <p class="text-center text-lg text-brand-green font-normal">
       {{ title }}
     </p>
 

@@ -13,13 +13,13 @@
 
           <div class="w-full flex items-center justify-between gap-4">
 
-            <h1 class="text-2xl font-bold">
+            <h1 class="text-2xl font-semibold">
               Candidate Overview
             </h1>
 
             <button
               type="button"
-              class="rounded-md bg-brand-green px-4 py-1 text-white font-semibold transition-background-color duration-500 hover:bg-brand-green/70"
+              class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
               @click="navigateTo('/console')"
             >
               Print
@@ -31,11 +31,11 @@
 
             <div class="flex flex-col gap-1">
 
-              <p class="line-clamp-1 text-sm font-semibold">
+              <p class="line-clamp-1 text-sm font-medium">
                 Examination: {{ data.assessment.name }}
               </p>
 
-              <p class="text-sm text-brand-gray font-semibold">
+              <p class="text-sm text-brand-gray font-medium">
                 Duration: {{ data.assessment.duration_mins }} minutes
               </p>
 
@@ -43,12 +43,12 @@
 
             <div class="w-max flex flex-col gap-1">
 
-              <p class="w-max text-sm font-semibold">
+              <p class="w-max text-sm font-medium">
                 Status: {{ data.assessment.status }}
               </p>
 
-              <p class="w-max text-sm text-brand-gray font-semibold">
-                Date: {{ data.assessment.date_time?.split('T')[0].split('-').reverse().join('-') }} {{ data.assessment.date_time?.split('T')[1] }} UTC
+              <p class="w-max text-sm text-brand-gray font-medium">
+                Date: {{ data.assessment.date_time?.split('T')[0] }} {{ data.assessment.date_time?.split('T')[1] }} UTC
               </p>
 
             </div>
@@ -78,13 +78,13 @@
 
             <span class="i-hugeicons:alert-02 size-8" />
 
-            <p class="text-xl font-bold">
+            <p class="text-xl font-semibold">
               Error Fetching Candidate
             </p>
 
             <button
               type="button"
-              class="rounded-md bg-brand-green px-3 py-1 text-white font-semibold transition-background-color duration-500 hover:bg-brand-green/70"
+              class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
               @click="refresh()"
             >
               Retry
@@ -103,7 +103,7 @@
 
             <span class="i-hugeicons:reload size-8 animate-spin" />
 
-            <p class="text-xl font-bold">
+            <p class="text-xl font-semibold">
               Fetching Candidate...
             </p>
 

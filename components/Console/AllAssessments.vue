@@ -43,7 +43,7 @@
 
           <div class="flex items-center justify-between gap-4">
 
-            <h2 class="truncate text-xl font-bold">{{ assessment.name }}</h2>
+            <h2 class="truncate text-xl font-semibold">{{ assessment.name }}</h2>
 
             <span
               v-if="assessment.status === 'completed' || assessment.status === 'upcoming'"
@@ -62,7 +62,7 @@
           </div>
 
           <div class="text-base">
-            <p>Date: {{ assessment.date_time.split('T')[0].split('-').reverse().join('-') }} {{ assessment.date_time.split('T')[1] }} UTC</p>
+            <p>Date: {{ assessment.date_time.split('T')[0] }} {{ assessment.date_time.split('T')[1] }} UTC</p>
             <p>Candidates: {{ assessment.number_of_candidates }}</p>
             <p>Duration: {{ assessment.duration_mins }} mins.</p>
           </div>
@@ -109,7 +109,7 @@
 
         <span class="i-hugeicons:database size-8" />
 
-        <p class="text-xl font-bold">
+        <p class="text-xl font-semibold">
           No Assessment Found
         </p>
 
