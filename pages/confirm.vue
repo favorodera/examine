@@ -9,13 +9,13 @@
         <span
           class="size-25"
           :class="{
-            'i-hugeicons:security-check text-brand-green': user,
-            'i-hugeicons:reload animate-spin text-amber text-brand-red': !user,
+            'i-hugeicons:security-check text-brand-green': instructor,
+            'i-hugeicons:reload animate-spin text-amber text-brand-red': !instructor,
           }"
         />
 
         <p class="text-center text-2xl font-semibold">
-          {{ user ? 'Authentication Successful' : 'Confirming Authentication' }}
+          {{ instructor ? 'Authentication Successful' : 'Confirming Authentication' }}
         </p>
 
       </main>
@@ -27,11 +27,16 @@
 </template>
 
 <script setup lang="ts">
-const user = useSupabaseUser()
+const instructor = useSupabaseUser()
+const cookieName = useRuntimeConfig().public.supabase.cookieName
+const redirectPath = useCookie(`${cookieName}-redirect-path`).value
 
-watch(user, () => {
-  if (user.value) {
-    navigateTo('/console')
+watch(instructor, () => {
+  if (instructor.value) {
+
+    useCookie(`${cookieName}-redirect-path`).value = null
+
+    return navigateTo(redirectPath || '/console')
   }
 }, { deep: true, immediate: true })
 </script>

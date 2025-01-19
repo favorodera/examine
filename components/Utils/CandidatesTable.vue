@@ -6,25 +6,43 @@
           <th class="select-none p-2">
             <button
               type="button"
-              class="flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
-              @click="sort('id')"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              @click="sort('candidate_id')"
             >
               <span>ID</span>
               <span
                 class="size-4 shrink-0"
                 :class="{
-                  'i-hugeicons:arrow-up-02': sortOrder === 'asc' && sortBy === 'id',
-                  'i-hugeicons:arrow-down-02': sortOrder === 'desc' && sortBy === 'id',
-                  'i-hugeicons:arrow-up-down': sortOrder === null && sortBy === 'id' || sortBy !== 'id',
+                  'i-hugeicons:arrow-up-02': sortOrder === 'asc' && sortBy === 'candidate_id',
+                  'i-hugeicons:arrow-down-02': sortOrder === 'desc' && sortBy === 'candidate_id',
+                  'i-hugeicons:arrow-up-down': sortOrder === null && sortBy === 'candidate_id' || sortBy !== 'candidate_id',
                 }"
               />
             </button>
           </th>
-  
+
           <th class="select-none p-2">
             <button
               type="button"
-              class="flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              @click="sort('candidate_email')"
+            >
+              <span>Email</span>
+              <span
+                class="size-4 shrink-0"
+                :class="{
+                  'i-hugeicons:arrow-up-02': sortOrder === 'asc' && sortBy === 'candidate_email',
+                  'i-hugeicons:arrow-down-02': sortOrder === 'desc' && sortBy === 'candidate_email',
+                  'i-hugeicons:arrow-up-down': sortOrder === null && sortBy === 'candidate_email' || sortBy !== 'candidate_email',
+                }"
+              />
+            </button>
+          </th>
+
+          <th class="select-none p-2">
+            <button
+              type="button"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
               @click="sort('name')"
             >
               <span>Name</span>
@@ -38,14 +56,14 @@
               />
             </button>
           </th>
-  
+
           <th class="select-none p-2">
             <button
               type="button"
-              class="flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
               @click="sort('score')"
             >
-              <span>Score</span>
+              <span>Score (%)</span>
               <span
                 class="size-4 shrink-0"
                 :class="{
@@ -56,11 +74,11 @@
               />
             </button>
           </th>
-  
+
           <th class="select-none p-2">
             <button
               type="button"
-              class="flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
               @click="sort('time_spent_mins')"
             >
               <span>Time Spent (Mins)</span>
@@ -74,11 +92,11 @@
               />
             </button>
           </th>
-  
+
           <th class="select-none p-2">
             <button
               type="button"
-              class="flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
               @click="sort('remark')"
             >
               <span>Remark</span>
@@ -94,20 +112,21 @@
           </th>
         </tr>
       </thead>
-  
+
       <tbody>
         <template v-if="filteredAndSortedCandidates.slice(splitter.start, splitter.end).length > 0">
           <tr
             v-for="candidate in paginatedCandidates"
-            :key="candidate.id"
+            :key="candidate.candidate_id"
             class="b-b border-brand-gray/20 hover:bg-brand-gray/5"
           >
             <td class="p-3">
-              <NuxtLink
-                :to="`/${useRoute().params.assessmentId}/${candidate.id}`"
-              >
-                {{ candidate.id }}
+              <NuxtLink :to="`/${useRoute().params.assessmentId}/${candidate.candidate_id}`">
+                {{ candidate.candidate_id }}
               </NuxtLink>
+            </td>
+            <td class="p-3">
+              {{ candidate.candidate_email }}
             </td>
             <td class="p-3">
               {{ candidate.name }}
@@ -128,13 +147,13 @@
               {{ candidate.remark }}
             </td>
           </tr>
-  
+
           <tr>
             <td
-              colspan="5"
+              colspan="6"
               class="p-3"
             >
-  
+
               <div class="mt-4 flex items-center justify-end gap-4">
                 <button
                   type="button"
@@ -146,9 +165,10 @@
                 </button>
 
                 <p class="text-center text-sm text-brand-gray">
-                  {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAndSortedCandidates.length) }} of {{ filteredAndSortedCandidates.length }} Candidates
+                  {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAndSortedCandidates.length) }} of {{
+                    filteredAndSortedCandidates.length }} Candidates
                 </p>
-  
+
                 <button
                   type="button"
                   class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
@@ -161,10 +181,10 @@
             </td>
           </tr>
         </template>
-  
+
         <template v-else>
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
                 <span class="i-hugeicons:database size-8" />
                 <p class="text-sm font-semibold">
@@ -178,22 +198,36 @@
     </table>
   </div>
 </template>
-  
+
 <script setup lang="ts">
 const props = defineProps<{
-  candidates: Candidate[]
+  candidates: AssessmentDetails['candidates']
   searchQuery: string
 }>()
-  
-const sortBy = ref<keyof Candidate | null>(null)
+
+const sortBy = ref<keyof {
+  candidate_id: string
+  name: string
+  score: number
+  remark: string
+  time_spent_mins: number
+  candidate_email: string
+} | null>(null)
 const sortOrder = ref<'asc' | 'desc' | null>(null)
-  
+
 const splitter = reactive({
   start: 0,
   end: 10,
 })
-  
-const sort = (field: keyof Candidate) => {
+
+const sort = (field: keyof {
+  candidate_id: string
+  name: string
+  score: number
+  remark: string
+  time_spent_mins: number
+  candidate_email: string
+}) => {
   if (sortBy.value === field) {
     if (sortOrder.value === null) {
       sortOrder.value = 'asc'
@@ -211,41 +245,41 @@ const sort = (field: keyof Candidate) => {
     sortOrder.value = 'asc'
   }
 }
-  
+
 const filteredCandidates = computed(() => {
   if (!props.searchQuery) return props.candidates
-      
+
   const query = props.searchQuery.toLowerCase()
   return props.candidates.filter(candidate =>
-    candidate.id.toLowerCase().includes(query)
+    candidate.candidate_id.toLowerCase().includes(query)
     || candidate.name.toLowerCase().includes(query)
     || candidate.score.toString().includes(query)
     || candidate.time_spent_mins.toString().includes(query)
     || candidate.remark.toLowerCase().includes(query),
   )
 })
-  
+
 const filteredAndSortedCandidates = computed(() => {
   if (!sortBy.value || !sortOrder.value) {
     return filteredCandidates.value
   }
-      
+
   return [...filteredCandidates.value].sort((a, b) => {
     const aValue = a[sortBy.value!]
     const bValue = b[sortBy.value!]
-        
+
     const modifier = sortOrder.value === 'asc' ? 1 : -1
-        
+
     if (aValue < bValue) return -1 * modifier
     if (aValue > bValue) return 1 * modifier
     return 0
   })
 })
-  
+
 const paginatedCandidates = computed(() =>
   filteredAndSortedCandidates.value.slice(splitter.start, splitter.end),
 )
-  
+
 const paginate = (direction: 'next' | 'prev') => {
   const totalItems = filteredAndSortedCandidates.value.length
   if (direction === 'next') {
@@ -261,12 +295,12 @@ const paginate = (direction: 'next' | 'prev') => {
     }
   }
 }
-  
+
 watch(() => props.searchQuery, () => {
   splitter.start = 0
   splitter.end = 10
 })
-  
+
 watch([sortBy, sortOrder], () => {
   splitter.start = 0
   splitter.end = 10

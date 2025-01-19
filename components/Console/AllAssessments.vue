@@ -22,7 +22,7 @@
 
     </template>
 
-    <template v-if="filteredAssessments.length > 0 && status === 'success'">
+    <template v-if=" status === 'success'">
 
       <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] w-full gap-4">
 
@@ -34,66 +34,69 @@
           <span class="i-hugeicons:plus-sign-square size-20 op-10" />
         </button>
 
-        <NuxtLink
-          v-for="(assessment, index) in filteredAssessments.slice(splitter.start, splitter.end)"
-          :key="index"
-          :to="`/console/${assessment.id}`"
-          class="shadowed w-full flex flex-col gap-2 rounded-lg bg-white p-4 duration-500 ease property-transform hover:scale-101"
-        >
+        <template v-if="filteredAssessments.length > 0 && status === 'success'">
 
-          <div class="flex items-center justify-between gap-4">
+          <NuxtLink
+            v-for="(assessment, index) in filteredAssessments.slice(splitter.start, splitter.end)"
+            :key="index"
+            :to="`/console/${assessment.assessment_id}`"
+            class="shadowed w-full flex flex-col gap-2 rounded-lg bg-white p-4 duration-500 ease property-transform hover:scale-101"
+          >
 
-            <h2 class="truncate text-xl font-semibold">{{ assessment.name }}</h2>
+            <div class="flex items-center justify-between gap-4">
 
-            <span
-              v-if="assessment.status === 'completed' || assessment.status === 'upcoming'"
-              class="size-5"
-              :class="{
-                'i-hugeicons:checkmark-circle-02  text-brand-green': assessment.status === 'completed',
-                'i-hugeicons:hourglass text-orange': assessment.status === 'upcoming',
-              }"
-            />
+              <h2 class="truncate text-xl font-semibold">{{ assessment.assessment_name }}</h2>
 
-            <span
-              v-else
-              class="size-3 animate-pulse rounded-full bg-brand-green"
-            />
+              <span
+                v-if="assessment.status === 'completed' || assessment.status === 'upcoming'"
+                class="size-5"
+                :class="{
+                  'i-hugeicons:checkmark-circle-02  text-brand-green': assessment.status === 'completed',
+                  'i-hugeicons:hourglass text-orange': assessment.status === 'upcoming',
+                }"
+              />
+
+              <span
+                v-else
+                class="size-3 animate-pulse rounded-full bg-brand-green"
+              />
     
-          </div>
+            </div>
 
-          <div class="text-base">
-            <p>Date: {{ assessment.date_time.split('T')[0] }} {{ assessment.date_time.split('T')[1] }} UTC</p>
-            <p>Candidates: {{ assessment.number_of_candidates }}</p>
-            <p>Duration: {{ assessment.duration_mins }} mins.</p>
-          </div>
+            <div class="text-base">
+              <p>Date: {{ formatDate(assessment.date_time) }} UTC</p>
+              <p>Candidates: {{ assessment.candidates[0].count }}</p>
+              <p>Duration: {{ assessment.duration_mins }} mins.</p>
+            </div>
 
-        </NuxtLink>
+          </NuxtLink>
 
-        <div
-          class="col-span-full mt-8 flex items-center justify-center gap-4"
-        >
-          <button
-            type="button"
-            class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.start === 0"
-            @click="paginate('prev')"
+          <div
+            class="col-span-full mt-8 flex items-center justify-center gap-4"
           >
-            <span class="i-hugeicons:arrow-left-02 size-4" />
-          </button>
+            <button
+              type="button"
+              class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+              :disabled="splitter.start === 0"
+              @click="paginate('prev')"
+            >
+              <span class="i-hugeicons:arrow-left-02 size-4" />
+            </button>
 
-          <p class="text-center text-sm text-gray">
-            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAssessments.length) }} of {{ filteredAssessments.length }} Assessments
-          </p>
+            <p class="text-center text-sm text-gray">
+              {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAssessments.length) }} of {{ filteredAssessments.length }} Assessments
+            </p>
 
-          <button
-            type="button"
-            class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.end >= filteredAssessments.length"
-            @click="paginate('next')"
-          >
-            <span class="i-hugeicons:arrow-right-02 size-4" />
-          </button>
-        </div>
+            <button
+              type="button"
+              class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+              :disabled="splitter.end >= filteredAssessments.length"
+              @click="paginate('next')"
+            >
+              <span class="i-hugeicons:arrow-right-02 size-4" />
+            </button>
+          </div>
+        </template>
 
       </section>
 
@@ -122,14 +125,7 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  assessments: Array< {
-    id: string
-    name: string
-    date_time: string
-    duration_mins: number
-    status: 'upcoming' | 'ongoing' | 'completed'
-    number_of_candidates: number
-  }> | []
+  assessments: AllAssessments[] | []
   status: 'success' | 'pending' | 'error' | 'idle'
 }>()
 
@@ -154,7 +150,7 @@ const filteredAssessments = computed(() => {
 
   if (query) {
     return props.assessments.filter(
-      assessment => assessment.name.toLowerCase().includes(query),
+      assessment => assessment.assessment_name.toLowerCase().includes(query),
     )
   }
 

@@ -148,8 +148,6 @@
   
 <script setup lang="ts">
 import { useModals, useModalsState } from '~/composables/useModals'
-  
-const createUpdate = useCreateUpdate()
     
 const form = reactive({
   question: '',
@@ -165,13 +163,13 @@ const form = reactive({
       
 const { status, execute } = await useAsyncData(
   'create-new-question',
-  () => $fetch('/api/newQuestion', {
+  () => $fetch('/api/new-question', {
     method: 'PUT',
     body: {
       assessmentId: useRoute().params.assessmentId,
       question: form.question,
       options: form.options,
-      correctOption: form.correctOption.toUpperCase(),
+      correctAnswer: form.correctOption.toUpperCase(),
       marksObtainable: form.marksObtainable,
     },
   }),
@@ -195,12 +193,8 @@ function resizeTextarea(textareaId: string) {
       
 watch(status, async (newStatus) => {
   if (newStatus === 'success') {
-    createUpdate.question = true
     useModals('newQuestion', 'close')
-      
-    setTimeout(() => {
-      createUpdate.question = false
-    }, 3000)
+
   }
 })
   

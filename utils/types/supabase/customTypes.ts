@@ -1,46 +1,96 @@
-type Candidate = {
+type AllAssessments = {
+  assessment_id: string
+  assessment_name: string
+  date_time: string
+  duration_mins: number
+  status: string | null
+  candidates: {
+    count: number
+  }[]
+}
+
+type AssessmentDetails = {
+  access_code: string
+  assessment_id: string
+  assessment_name: string
+  marks_obtainable: number
+  pass_mark: number
+  date_time: string
+  duration_mins: number
+  status: string | null
+  candidates: {
+    candidate_id: string
+    name: string
+    score: number
+    remark: string | null
+    time_spent_mins: number
+    candidate_email: string
+  }[]
+  questions: {
+    questions: {
+      id: number
+      question: string
+      options: {
+        [key: string]: string
+      }
+      marks_obtainable: number
+    }[]
+  }
+  correct_answers: {
+    correct_answers: string[]
+  }
+}
+
+type CandidateDetails = {
+  candidate_id: string
   name: string
-  id: string
   score: number
   time_spent_mins: number
-  remark: 'pass' | 'fail'
-  answers: Answer[]
-}
+  remark: string
+  candidate_email: string
+  answers: string[]
+  assessments: {
+    status: string
+    date_time: string
+    duration_mins: number
+    assessment_name: string
+    marks_obtainable: number
+    questions: {
+      questions: {
+        id: number
+        options: {
+          [key: string]: string
+        }
+        question: string
+        marks_obtainable: number
 
-type Question = {
-  id: number
-  question: string
-  options: {
-    [key: string]: string
+      }[]
+    }
+    correct_answers: {
+      correct_answers: string[]
+    }
+    
   }
-  correct_option: string
-  marks_obtainable: number
-}
-
-type Answer = {
-  question_id: number
-  option_selected: string
-  status: 'correct' | 'incorrect'
 }
 
 type Assessment = {
-  name: string
+  access_code: string
+  assessment_id: string
+  assessment_name: string
   date_time: string
-  id: string
   duration_mins: number
   marks_obtainable: number
-  pass_mark: number
-  status: 'upcoming' | 'ongoing' | 'completed'
-  access_code: string
-  questions: Question[]
-  candidates: Candidate[]
+  status: string
+  questions: {
+    questions: {
+      id: number
+      question: string
+      options: {
+        [key: string]: string
+      }
+      marks_obtainable: number
+    }[]
+  }
 }
 
-type CentralDatabase = {
-  name: string
-  email: string
-  user_id: string
-  assessments: Assessment[]
-}
-
-export type { Assessment, CentralDatabase, Candidate, Question, Answer }
+export type { AllAssessments, AssessmentDetails, CandidateDetails, Assessment }

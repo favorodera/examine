@@ -23,8 +23,8 @@
           >
 
             <img
-              :src="user?.user_metadata.picture"
-              :alt="user?.email"
+              :src="instructor?.user_metadata.picture"
+              :alt="instructor?.email"
               class="size-full object-cover"
             >
             
@@ -59,7 +59,7 @@
             <button
               type="button"
               class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="refresh()"
+              @click="refreshAssessments()"
             >
               Retry
             </button>
@@ -96,18 +96,33 @@
 </template>
 
 <script setup lang="ts">
-const user = useSupabaseUser()
-const createUpdate = useCreateUpdate()
+import type { RealtimeChannel } from '@supabase/realtime-js'
 
-const { data: assessments, status, refresh } = useAsyncData(
+const instructor = useSupabaseUser()
+const client = useSupabaseClient()
+const assessmentChannel = ref<RealtimeChannel>()
+
+const { data: assessments, status, refresh: refreshAssessments } = useAsyncData(
   'all-assessments',
-  () => $fetch('/api/allAssessments', { method: 'GET', timeout: 30000 }),
+  () => $fetch('/api/all-assessments', { method: 'GET', timeout: 30000 }),
   { server: false },
 )
 
-watch(createUpdate, () => {
-  if (createUpdate.assessment) {
-    refresh()
-  }
+onMounted(() => {
+
+  assessmentChannel.value = client.channel('assessments')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'assessments' },
+      () => refreshAssessments(),
+    )
+    .subscribe()
+
+})
+
+onUnmounted(() => {
+
+  client.removeChannel(assessmentChannel.value!)
+
 })
 </script>

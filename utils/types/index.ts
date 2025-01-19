@@ -1,6 +1,7 @@
 type ModalsState = {
   newAssessment: boolean
   newQuestion: boolean
+  assessmentRegistration: boolean
 }
 
 type CreateUpdateState = {

@@ -9,33 +9,197 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      central_database: {
+      assessments: {
         Row: {
-          assessments: Json[] | null
-          email: string | null
+          access_code: string
+          assessment_id: string
+          assessment_name: string
+          date_time: string
+          duration_mins: number
+          instructor_id: string
+          marks_obtainable: number
+          pass_mark: number
+          status: string | null
+        }
+        Insert: {
+          access_code?: string
+          assessment_id?: string
+          assessment_name: string
+          date_time?: string
+          duration_mins: number
+          instructor_id?: string
+          marks_obtainable: number
+          pass_mark: number
+          status?: string | null
+        }
+        Update: {
+          access_code?: string
+          assessment_id?: string
+          assessment_name?: string
+          date_time?: string
+          duration_mins?: number
+          instructor_id?: string
+          marks_obtainable?: number
+          pass_mark?: number
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'assessments_instructor_id_fkey'
+            columns: ['instructor_id']
+            isOneToOne: false
+            referencedRelation: 'instructors'
+            referencedColumns: ['user_id']
+          },
+        ]
+      }
+      candidates: {
+        Row: {
+          answers: string[]
+          assessment_id: string
+          candidate_email: string
+          candidate_id: string
+          instructor_id: string
+          name: string
+          remark: string
+          score: number
+          serial_number: number
+          time_spent_mins: number
+        }
+        Insert: {
+          answers: string[]
+          assessment_id: string
+          candidate_email: string
+          candidate_id: string
+          instructor_id: string
+          name: string
+          remark: string
+          score: number
+          serial_number: number
+          time_spent_mins: number
+        }
+        Update: {
+          answers?: string[]
+          assessment_id?: string
+          candidate_email?: string
+          candidate_id?: string
+          instructor_id?: string
+          name?: string
+          remark?: string
+          score?: number
+          serial_number?: number
+          time_spent_mins?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'candidates_assessment_id_fkey'
+            columns: ['assessment_id']
+            isOneToOne: false
+            referencedRelation: 'assessments'
+            referencedColumns: ['assessment_id']
+          },
+          {
+            foreignKeyName: 'candidates_instructor_id_fkey'
+            columns: ['instructor_id']
+            isOneToOne: false
+            referencedRelation: 'instructors'
+            referencedColumns: ['user_id']
+          },
+        ]
+      }
+      correct_answers: {
+        Row: {
+          assessment_id: string
+          correct_answers: string[]
+          instructor_id: string
+        }
+        Insert: {
+          assessment_id: string
+          correct_answers: string[]
+          instructor_id: string
+        }
+        Update: {
+          assessment_id?: string
+          correct_answers?: string[]
+          instructor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'correct_answers_assessment_id_fkey'
+            columns: ['assessment_id']
+            isOneToOne: true
+            referencedRelation: 'assessments'
+            referencedColumns: ['assessment_id']
+          },
+          {
+            foreignKeyName: 'correct_answers_instructor_id_fkey'
+            columns: ['instructor_id']
+            isOneToOne: false
+            referencedRelation: 'instructors'
+            referencedColumns: ['user_id']
+          },
+        ]
+      }
+      instructors: {
+        Row: {
+          email: string
           name: string | null
           user_id: string
         }
         Insert: {
-          assessments?: Json[] | null
-          email?: string | null
+          email: string
           name?: string | null
           user_id?: string
         }
         Update: {
-          assessments?: Json[] | null
-          email?: string | null
+          email?: string
           name?: string | null
           user_id?: string
         }
         Relationships: []
+      }
+      questions: {
+        Row: {
+          assessment_id: string
+          instructor_id: string
+          questions: Json[]
+        }
+        Insert: {
+          assessment_id: string
+          instructor_id: string
+          questions: Json[]
+        }
+        Update: {
+          assessment_id?: string
+          instructor_id?: string
+          questions?: Json[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'questions_assessment_id_fkey'
+            columns: ['assessment_id']
+            isOneToOne: true
+            referencedRelation: 'assessments'
+            referencedColumns: ['assessment_id']
+          },
+          {
+            foreignKeyName: 'questions_instructor_id_fkey'
+            columns: ['instructor_id']
+            isOneToOne: false
+            referencedRelation: 'instructors'
+            referencedColumns: ['user_id']
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_assessment_status: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

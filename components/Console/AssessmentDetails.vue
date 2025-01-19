@@ -13,7 +13,7 @@
         <h1 class="text-xl font-semibold">
           Access Code
         </h1>
-        <p class="text-lg font-medium">
+        <p class="line-clamp-1 text-start text-lg font-medium">
           {{ assessment?.access_code }}
         </p>
 
@@ -103,7 +103,7 @@
             </p>
 
             <p class="line-clamp-1">
-              ID: {{ bestCandidate?.id }}
+              ID: {{ bestCandidate?.candidate_id }}
             </p>
 
             <p>
@@ -121,7 +121,7 @@
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
           <h1 class="text-xl font-semibold">
-            Best Candidate
+            Worst Candidate
           </h1>
 
           <div class="flex flex-col gap-2 text-lg font-semibold">
@@ -131,7 +131,7 @@
             </p>
 
             <p class="line-clamp-1">
-              ID: {{ worstCandidate?.id }}
+              ID: {{ worstCandidate?.candidate_id }}
             </p>
 
             <p>
@@ -181,6 +181,7 @@
         </p>
 
         <button
+          v-if="assessment.status === 'upcoming'"
           type="button"
           class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70"
           @click="useModals('newQuestion', 'open')"
@@ -191,11 +192,11 @@
 
       </div>
 
-      <template v-if="assessment.questions.length > 0 ">
+      <template v-if="assessment.questions.questions.length > 0 ">
 
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,30rem),1fr))] w-full gap-8">
           <div
-            v-for="question in assessment.questions.slice(splitter.start, splitter.end)"
+            v-for="question in assessment.questions.questions.slice(splitter.start, splitter.end)"
             :key="question.id"
             class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-4"
           >
@@ -209,7 +210,7 @@
                 :key="PropertyKey"
                 class="ml-4 font-semibold"
                 :class="{
-                  'text-brand-green': PropertyKey.toString().toUpperCase() === question.correct_option,
+                  'text-brand-green': PropertyKey.toString().toUpperCase() === assessment.correct_answers.correct_answers[question.id - 1],
                 }"
               >
                 <span>
@@ -231,13 +232,13 @@
           </button>
 
           <p class="text-center text-sm text-gray">
-            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, assessment.questions.length) }} of {{ assessment.questions.length }} Questions
+            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, assessment.questions.questions.length) }} of {{ assessment.questions.questions.length }} Questions
           </p>
 
           <button
             type="button"
             class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.end >= assessment.questions.length"
+            :disabled="splitter.end >= assessment.questions.questions.length"
             @click="paginateQuestions('next')"
           >
             <span class="i-hugeicons:arrow-right-02 size-4" />
@@ -292,12 +293,12 @@ const isAccessCodeCopied = ref(false)
 const searchQuery = ref('')
 
 const props = defineProps<{
-  assessment: Assessment | null
+  assessment: AssessmentDetails | null
   status: 'success' | 'pending' | 'error' | 'idle'
 }>()
 
 const copyAssessmentUrl = () => {
-  navigator.clipboard.writeText(`${window.location.origin}/${props.assessment?.id}`)
+  navigator.clipboard.writeText(`${window.location.origin}/${props.assessment?.assessment_id}?accessCode=${props.assessment?.access_code}`)
   isAccessCodeCopied.value = true
   setTimeout(() => {
     isAccessCodeCopied.value = false
@@ -337,7 +338,7 @@ const splitter = reactive({
 })
 
 function paginateQuestions(direction: 'next' | 'prev') {
-  const totalQuestions = props.assessment?.questions.length ?? 0
+  const totalQuestions = props.assessment?.questions.questions.length ?? 0
   if (direction === 'next') {
     if (splitter.end < totalQuestions) {
       splitter.start += 6

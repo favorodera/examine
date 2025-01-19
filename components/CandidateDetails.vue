@@ -1,6 +1,6 @@
 <template>
 
-  <template v-if="candidate && questions && status==='success'">
+  <template v-if="candidateDetails && status==='success'">
 
     <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,27rem),1fr))] w-full gap-8">
 
@@ -10,14 +10,14 @@
           Bio
         </h1>
 
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1">
 
           <p class="line-clamp-1 text-lg font-medium">
-            Name: {{ candidate.name }}
+            Name: {{ candidateDetails.name }}
           </p>
 
           <p class="text-lg font-medium">
-            ID: {{ candidate.id }}
+            ID: {{ candidateDetails.candidate_id }}
           </p>
 
         </div>
@@ -29,7 +29,7 @@
           Score
         </h1>
         <p class="text-lg text-brand-green font-medium">
-          {{ candidate.score }}%
+          {{ candidateDetails.score }}%
         </p>
 
       </div>
@@ -40,7 +40,7 @@
           Number of Questions
         </h1>
         <p class="text-lg text-brand-green font-medium">
-          {{ questions.length }}
+          {{ candidateDetails.assessments.questions.questions.length }}
         </p>
 
       </div>
@@ -51,7 +51,11 @@
           Correct
         </h1>
         <p class="text-lg text-brand-green font-medium">
-          {{ candidate.answers.filter(answer => answer.status === 'correct').length }}
+          {{
+            candidateDetails.answers.filter(
+              (answer, index) => answer === candidateDetails?.assessments.correct_answers.correct_answers[index],
+            ).length
+          }}
         </p>
 
       </div>
@@ -62,7 +66,11 @@
           Incorrect
         </h1>
         <p class="text-lg text-red-500 font-medium">
-          {{ candidate.answers.filter(answer => answer.status === 'incorrect').length }}
+          {{
+            candidateDetails.answers.filter(
+              (answer, index) => answer !== candidateDetails?.assessments.correct_answers.correct_answers[index],
+            ).length
+          }}
         </p>
 
       </div>
@@ -75,11 +83,11 @@
         <p
           class="text-lg font-medium capitalize"
           :class="{
-            'text-red-500': candidate?.remark === 'fail',
-            'text-brand-green': candidate?.remark === 'pass',
+            'text-red-500': candidateDetails.remark === 'fail',
+            'text-brand-green': candidateDetails.remark === 'pass',
           }"
         >
-          {{ candidate.remark }}
+          {{ candidateDetails.remark }}
         </p>
 
       </div>
@@ -95,31 +103,33 @@
         </p>
 
         <p class="text-xl font-semibold">
-          Time Spent: {{ candidate.time_spent_mins }} mins
+          Time Spent: {{ candidateDetails.time_spent_mins }} mins
         </p>
 
       </div>
 
-      <template v-if="candidate.answers.length > 0 ">
+      <template v-if="candidateDetails.answers.length > 0 ">
 
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,30rem),1fr))] w-full gap-8">
           <div
-            v-for="answer in candidate.answers.slice(splitter.start, splitter.end)"
-            :key="answer.question_id"
+            v-for="question in candidateDetails.assessments.questions.questions"
+            :key="question.id"
             class="shadowed relative w-full flex flex-col gap-3 rounded-3.5 bg-white p-8"
           >
             <h1 class="text-5 font-normal">
-              {{ answer.question_id }}. {{ questions[answer.question_id].question }} ({{ questions[answer.question_id].marks_obtainable }} marks)
+              {{ question.id }}. {{ question.question }} ({{ question.marks_obtainable }} marks)
             </h1>
         
             <ol class="list-upper-alpha">
               <li
-                v-for="(option, PropertyKey) in questions[answer.question_id].options"
+                v-for="(option, PropertyKey) in question.options"
                 :key="PropertyKey"
                 class="ml-4 font-semibold"
                 :class="{
-                  'text-brand-green': PropertyKey.toString().toUpperCase() === questions[answer.question_id].correct_option,
-                  'text-red-500': PropertyKey.toString().toUpperCase() === answer.option_selected && answer.status === 'incorrect',
+                  'text-brand-green': PropertyKey.toString().toUpperCase() === candidateDetails.answers[question.id - 1]
+                    || PropertyKey.toString().toUpperCase() === candidateDetails.assessments.correct_answers.correct_answers[question.id - 1],
+                  'text-red-500': PropertyKey.toString().toUpperCase() === candidateDetails.answers[question.id - 1]
+                    && PropertyKey.toString().toUpperCase() !== candidateDetails.assessments.correct_answers.correct_answers[question.id - 1],
                 }"
               >
                 <span>
@@ -132,8 +142,8 @@
               :class="[
                 'size-5 absolute top-3 right-3',
                 {
-                  'i-hugeicons:checkmark-circle-02 text-brand-green': answer.status === 'correct',
-                  'i-hugeicons:cancel-circle text-red-500': answer.status === 'incorrect',
+                  'i-hugeicons:checkmark-circle-02 text-brand-green': candidateDetails.answers[question.id -1] === candidateDetails.assessments.correct_answers.correct_answers[question.id -1],
+                  'i-hugeicons:cancel-circle text-red-500': candidateDetails.answers[question.id -1] !== candidateDetails.assessments.correct_answers.correct_answers[question.id -1],
                 },
               ]"
             />
@@ -153,13 +163,13 @@
           </button>
 
           <p class="text-center text-sm text-gray">
-            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, candidate.answers.length) }} of {{ candidate.answers.length }} Answers
+            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, candidateDetails.answers.length) }} of {{ candidateDetails.answers.length }} Answers
           </p>
 
           <button
             type="button"
             class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.end >= candidate.answers.length"
+            :disabled="splitter.end >= candidateDetails.answers.length"
             @click="paginateQuestions('next')"
           >
             <span class="i-hugeicons:arrow-right-02 size-4" />
@@ -186,7 +196,7 @@
 
   <slot name="loading" />
 
-  <template v-if="!candidate && !questions && status==='success'">
+  <template v-if="!candidateDetails && status==='success'">
 
     <div class="m-a flex flex-col items-center gap-4">
 
@@ -203,9 +213,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  candidate: Candidate | undefined
+  candidateDetails: CandidateDetails | null
   status: 'success' | 'pending' | 'error' | 'idle'
-  questions: Question[] | undefined
 }>()
 
 const splitter = reactive({
@@ -214,7 +223,7 @@ const splitter = reactive({
 })
 
 function paginateQuestions(direction: 'next' | 'prev') {
-  const totalAnswers = props.candidate?.answers.length ?? 0
+  const totalAnswers = props.candidateDetails?.answers.length ?? 0
   if (direction === 'next') {
     if (splitter.end < totalAnswers) {
       splitter.start += 6

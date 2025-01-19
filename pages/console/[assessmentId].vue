@@ -32,7 +32,7 @@
             <div class="flex flex-col gap-1">
 
               <p class="line-clamp-1 text-sm font-medium">
-                Examination: {{ assessment.name }}
+                Examination: {{ assessment.assessment_name }}
               </p>
 
               <p class="text-sm text-brand-gray font-medium">
@@ -48,7 +48,7 @@
               </p>
 
               <p class="w-max text-sm text-brand-gray font-medium">
-                Date: {{ assessment.date_time.split('T')[0] }} {{ assessment.date_time.split('T')[1] }} UTC
+                Date: {{ assessment.date_time.split('T')[0].split('-').reverse().join('/') }} {{ assessment.date_time.split('T')[1].split('+')[0].split(':').slice(0, 2).join(':') }} UTC
               </p>
 
             </div>
@@ -84,7 +84,7 @@
             <button
               type="button"
               class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="refresh()"
+              @click="refreshAssessmentDetails()"
             >
               Retry
             </button>
@@ -122,17 +122,11 @@
 
 <script setup lang="ts">
 const { assessmentId } = useRoute().params
-const createUpdate = useCreateUpdate()
 
-const { data: assessment, refresh, status } = await useAsyncData(
+const { data: assessment, refresh: refreshAssessmentDetails, status } = await useAsyncData(
   'assessment-details',
-  () => $fetch(`/api/assessmentDetails?assessmentId=${assessmentId}`, { method: 'get', timeout: 30000 }),
+  () => $fetch(`/api/assessment-details?assessmentId=${assessmentId}`, { method: 'get', timeout: 30000 }),
   { server: false },
 )
 
-watch(createUpdate, () => {
-  if (createUpdate.question) {
-    refresh()
-  }
-})
 </script>

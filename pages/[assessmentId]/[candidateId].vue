@@ -3,7 +3,7 @@
   <Layout>
 
     <template
-      v-if="data?.assessment && data?.candidate && status === 'success'"
+      v-if="candidateDetails && status === 'success'"
       #nav
     >
 
@@ -32,11 +32,11 @@
             <div class="flex flex-col gap-1">
 
               <p class="line-clamp-1 text-sm font-medium">
-                Examination: {{ data.assessment.name }}
+                Examination: {{ candidateDetails.assessments.assessment_name }}
               </p>
 
               <p class="text-sm text-brand-gray font-medium">
-                Duration: {{ data.assessment.duration_mins }} minutes
+                Duration: {{ candidateDetails.assessments.duration_mins }} minutes
               </p>
 
             </div>
@@ -44,11 +44,11 @@
             <div class="w-max flex flex-col gap-1">
 
               <p class="w-max text-sm font-medium">
-                Status: {{ data.assessment.status }}
+                Status: {{ candidateDetails.assessments.status }}
               </p>
 
               <p class="w-max text-sm text-brand-gray font-medium">
-                Date: {{ data.assessment.date_time?.split('T')[0] }} {{ data.assessment.date_time?.split('T')[1] }} UTC
+                Date: {{ formatDate(candidateDetails.assessments.date_time) }} UTC
               </p>
 
             </div>
@@ -63,10 +63,9 @@
 
     <template #body>
       
-      <Candidate
-        :candidate="data?.candidate"
+      <CandidateDetails
+        :candidate-details="candidateDetails "
         :status="status"
-        :questions="data?.assessment.questions"
       >
     
         <template
@@ -111,7 +110,7 @@
 
         </template>
 
-      </Candidate>
+      </CandidateDetails>
 
     </template>
 
@@ -122,9 +121,9 @@
 <script setup lang="ts">
 const { assessmentId, candidateId } = useRoute().params
   
-const { data, status, refresh } = await useAsyncData(
+const { data: candidateDetails, status, refresh } = await useAsyncData(
   'candidate',
-  () => $fetch(`/api/candidate?assessmentId=${assessmentId}&candidateId=${candidateId}`, { method: 'GET', timeout: 30000 }),
+  () => $fetch(`/api/candidate-details?assessmentId=${assessmentId}&candidateId=${candidateId}`, { method: 'GET', timeout: 30000 }),
   { server: false },
 )
 </script>

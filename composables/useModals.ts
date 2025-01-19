@@ -1,6 +1,7 @@
 const modalsState = reactive<ModalsState>({
   newAssessment: false,
   newQuestion: false,
+  assessmentRegistration: false,
 })
 
 export function useModalsState() {

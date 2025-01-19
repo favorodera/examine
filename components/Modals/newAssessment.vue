@@ -51,25 +51,6 @@
             </label>
         
             <label
-              for="access-code"
-            >
-              Access Code
-              <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
-                <span class="i-hugeicons:access size-5 shrink-0" />
-                <input
-                  id="access-code"
-                  v-model="form.accessCode"
-                  type="text"
-                  spellcheck="true"
-                  name="access-code"
-                  placeholder="history1st"
-                  class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none placeholder-brand-dark/50"
-                  required
-                >
-              </div>
-            </label>
-        
-            <label
               for="date-time"
             >
               Date & Time ( UTC )
@@ -94,7 +75,7 @@
                 <span class="i-hugeicons:hourglass size-5 shrink-0" />
                 <input
                   id="duration"
-                  v-model="form.duration"
+                  v-model="form.durationMins"
                   type="number"
                   name="duration"
                   placeholder="60"
@@ -178,27 +159,23 @@
   
 <script setup lang="ts">
 import { useModals, useModalsState } from '~/composables/useModals'
-  
-const createUpdate = useCreateUpdate()
     
 const form = reactive({
   name: undefined,
-  accessCode: undefined,
   dateTime: undefined,
-  duration: undefined,
+  durationMins: undefined,
   marksObtainable: undefined,
   passMark: undefined,
 })
       
 const { status, execute } = await useAsyncData(
   'create-new-assessment',
-  () => $fetch('/api/newAssessment', {
+  () => $fetch('/api/new-assessment', {
     method: 'POST',
     body: {
       name: form.name,
-      accessCode: form.accessCode,
       dateTime: form.dateTime,
-      duration: form.duration,
+      durationMins: form.durationMins,
       marksObtainable: form.marksObtainable,
       passMark: form.passMark,
     },
@@ -210,31 +187,17 @@ const { status, execute } = await useAsyncData(
       
 watch(status, async (newStatus) => {
   if (newStatus === 'success') {
-    createUpdate.assessment = true
     useModals('newAssessment', 'close')
-      
-    setTimeout(() => {
-      createUpdate.assessment = false
-    }, 3000)
   }
 })
   
 watch(useModalsState(), (newState) => {
   if (newState.newAssessment) {
-    document.body.style.overflow = 'hidden'
-  }
-  else {
-    document.body.style.overflow = ''
     form.name = undefined
-    form.accessCode = undefined
     form.dateTime = undefined
-    form.duration = undefined
+    form.durationMins = undefined
     form.marksObtainable = undefined
     form.passMark = undefined
   }
-})
-  
-onUnmounted(() => {
-  document.body.style.overflow = ''
 })
 </script>

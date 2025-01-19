@@ -21,8 +21,8 @@ export default withNuxt([
         ignores: ['pre', 'textarea'],
       }],
       'vue/max-len': ['error', {
-        code: 120,
-        template: 120,
+        code: 150,
+        template: 150,
         tabWidth: 2,
         ignoreComments: true,
         ignoreUrls: true,
