@@ -54,7 +54,7 @@
             >
               ID
               <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
-                <span class="i-hugeicons:access size-5 shrink-0" />
+                <span class="i-hugeicons:id size-5 shrink-0" />
                 <input
                   id="id"
                   v-model="form.id"
@@ -69,15 +69,34 @@
             </label>
 
             <label
+              for="department"
+            >
+              Department
+              <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
+                <span class="i-hugeicons:departement size-5 shrink-0" />
+                <input
+                  id="id"
+                  v-model="form.department"
+                  type="text"
+                  spellcheck="true"
+                  name="department"
+                  placeholder="Department or Class"
+                  class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none placeholder-brand-dark/50"
+                  required
+                >
+              </div>
+            </label>
+
+            <label
               for="id"
             >
               Email
               <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
-                <span class="i-hugeicons:access size-5 shrink-0" />
+                <span class="i-hugeicons:mail-01 size-5 shrink-0" />
                 <input
                   id="email"
                   v-model="form.email"
-                  type="text"
+                  type="email"
                   spellcheck="true"
                   name="email"
                   placeholder="Email"
@@ -120,6 +139,7 @@ const status = ref('idle' as 'pending' | 'success' | 'error' | 'idle')
 const form = reactive({
   name: undefined,
   id: undefined,
+  department: undefined,
   email: undefined,
 })
 
@@ -136,6 +156,7 @@ watch(useModalsState(), (newState) => {
   if (newState.assessmentRegistration) {
     form.name = undefined
     form.id = undefined
+    form.department = undefined
     form.email = undefined
   }
 })

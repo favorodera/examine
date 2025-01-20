@@ -6,122 +6,156 @@
       v-if="assessment && status === 'success'"
       #nav
     >
-    
-      <nav class="shadowed sticky z-1 w-full flex justify-center bg-white p-4">
-        
-        <div class="max-w-360 w-full flex flex-col items-center justify-between gap-2">
-          
-          <div class="w-full flex items-center justify-between gap-4">
-            
-            <h1 class="text-2xl font-semibold">
-              
-              Assessment
-            </h1>
-            
-            <button
-              type="button"
-              class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="navigateTo('/console')"
-            >
-            
-              Submit
-            </button>
-            
-          </div>
-          
-          <div class="w-full flex items-center justify-between gap-4">
-            
-            <div class="flex flex-col gap-1">
-              
-              <p class="line-clamp-1 text-sm font-medium">
-                
-                Examination: {{ assessment.assessment_name }}
-              </p>
-              
-              <p class="text-sm text-brand-gray font-medium">
-                
-                Duration: {{ assessment.duration_mins }} minutes
-              </p>
-              
-            </div>
-            
-            <div class="w-max flex flex-col gap-1">
-              
-              <p class="w-max text-sm font-medium">
-                
-                Status: {{ assessment.status }}
-              </p>
-              
-              <p class="w-max text-sm text-brand-gray font-medium">
-                
-                Date: {{ formatDate(assessment.date_time) }} UTC
-              </p>
-              
-            </div>
-            
-          </div>
-          
+
+      <div class="w-full flex items-center justify-between gap-4">
+
+        <h1 class="text-2xl font-semibold">
+
+          Assessment
+        </h1>
+
+        <button
+          type="button"
+          class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+          @click="navigateTo('/console')"
+        >
+
+          Submit
+        </button>
+
+      </div>
+
+      <div class="w-full flex items-center justify-between gap-4">
+
+        <div class="flex flex-col gap-1">
+
+          <p class="line-clamp-1 text-sm font-medium">
+
+            Examination: {{ assessment.assessment_name }}
+          </p>
+
+          <p class="text-sm text-brand-gray font-medium">
+
+            Duration: {{ assessment.duration_mins }} minutes
+          </p>
+
         </div>
-        
-      </nav>
-      
+
+        <div class="w-max flex flex-col gap-1">
+
+          <p class="w-max text-sm font-medium">
+
+            Status: {{ assessment.status }}
+          </p>
+
+          <p class="w-max text-sm text-brand-gray font-medium">
+
+            Date: {{ `${formatDateTime(assessment.date_time).formattedDate}
+                ${formatDateTime(assessment.date_time).formattedTime}` }} UTC
+          </p>
+
+        </div>
+
+      </div>
+
     </template>
 
     <template #body>
-      
-      <template v-if="candidateBio && assessment">
-        
-        <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
-          
-          <p class="text-xl font-semibold">
-            
-            Candidate Bio
-          </p>
-          
-          <div class="flex flex-col gap-2 text-lg font-semibold">
-            
-            <p class="line-clamp-1">
-              
-              Name: {{ candidateBio.name }}
+
+      <template v-if="candidateBio && assessment && assessment.status === 'ongoing'">
+
+        <div
+          class="shadowed w-full flex flex-col-reverse items-center justify-between gap-4 rounded-3.5 bg-white p-8 sm:flex-row"
+        >
+
+          <div class="flex flex-col self-start gap-3">
+
+            <p class="text-xl font-semibold">
+
+              Candidate Bio
             </p>
-            
-            <p class="line-clamp-1">
-              
-              ID: {{ candidateBio.id }}
-            </p>
-            
-            <p>
-              Email: {{ candidateBio.email }}
-            </p>
-            
+
+            <div class="flex flex-col gap-2 text-lg font-semibold">
+
+              <p class="line-clamp-1">
+
+                Name: {{ candidateBio.name }}
+              </p>
+
+              <p class="line-clamp-1">
+
+                ID: {{ candidateBio.id }}
+              </p>
+
+              <p class="line-clamp-1">
+
+                Department: {{ candidateBio.department }}
+              </p>
+
+              <p>
+                Email: {{ candidateBio.email }}
+              </p>
+
+            </div>
+
           </div>
-          
+
+          <div class="aspect-square size-30 flex items-center justify-center b-4 b-brand-green rounded-full p-4">
+
+            <div class="flex gap-1">
+
+              <div class="flex flex-col gap-2">
+                <p class="text-2xl font-bold">
+                  {{ timer.hour < 10 ? `0${timer.hour}` : timer.hour }}
+                </p>
+                <p class="text-center">
+                  H
+                </p>
+              </div>
+
+              <p class="text-2xl font-bold">
+                :
+              </p>
+
+              <div class="flex flex-col gap-2">
+                <p class="text-2xl font-bold">
+                  {{ timer.minute < 10 ? `0${timer.minute}` : timer.minute }}
+                </p>
+                <p class="text-center">
+                  M
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
-        
+
       </template>
 
-      <template v-if="assessment && status === 'success'">
-        
+      <template v-if="assessment && status === 'success' && assessment.status === 'ongoing'">
+
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
-          
+
           <template v-if="assessment.questions.questions[currentQuestionIndex]">
-            
+
             <p class="text-xl font-semibold">
-              
+
               Question {{ currentQuestionIndex + 1 }}
             </p>
-            
+
             <h1 class="p-2 text-lg font-medium">
-              
+
               {{ assessment.questions.questions[currentQuestionIndex].question }}
             </h1>
-            
+
             <div
               v-for="(option, PropertyKey) in assessment.questions.questions[currentQuestionIndex]?.options"
               :key="PropertyKey"
               class="w-max"
             >
-            
+
               <input
                 :id="`option-${PropertyKey.toString().toLowerCase()}`"
                 v-model="selectedOptions[currentQuestionIndex]"
@@ -130,122 +164,158 @@
                 class="peer hidden"
                 :value="PropertyKey.toString().toUpperCase()"
               >
-              
+
               <label
                 :for="`option-${PropertyKey.toString().toLowerCase()}`"
                 class="option flex cursor-pointer items-center gap-2 rounded-md p-2 font-medium transition-colors duration-200 hover:bg-brand-green/20 peer-checked:bg-brand-green peer-checked:text-white"
               >
-              
+
                 <span class="font-semibold">
                   {{ PropertyKey.toString().toUpperCase() }}.
                 </span>
                 {{ option }}
               </label>
-              
+
             </div>
-            
+
           </template>
 
           <template v-else>
-            
+
             <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
-              
+
               <span class="i-hugeicons:database size-8" />
-              
+
               <p class="text-sm font-semibold">
-                
+
                 Question not found
               </p>
-              
+
             </div>
-            
+
           </template>
-          
+
         </div>
 
-        <div class="shadowed grid grid-cols-[repeat(auto-fill,minmax(min(100%,2rem),1fr))] mb-8 w-full gap-3 rounded-3.5 bg-white p-8">
-          
-          <button
-            v-for="(_question, index) in assessment.questions.questions"
-            :key="index"
-            type="button"
-            :class="[
-              'size-7.5 rounded-md cursor-pointer b b-brand-gray hover:bg-brand-gray  transition-all duration-500 ease',
-              {
-                'bg-brand-gray': currentQuestionIndex === index,
-                'bg-brand-green text-white': selectedOptions[index],
-              },
-            ]"
-            @click="goToQuestion(index)"
+        <template v-if="assessment.questions.questions.length > 0">
+
+          <div
+            class="shadowed grid grid-cols-[repeat(auto-fill,minmax(min(100%,2rem),1fr))] mb-8 w-full gap-3 rounded-3.5 bg-white p-8"
           >
-          
-            {{ index + 1 }}
-          </button>
-          
-        </div>
-        
+
+            <button
+              v-for="(_question, index) in assessment.questions.questions"
+              :key="index"
+              type="button"
+              :class="[
+                'size-7.5 rounded-md cursor-pointer b b-brand-gray hover:bg-brand-gray  transition-all duration-500 ease',
+                {
+                  'bg-brand-gray': currentQuestionIndex === index,
+                  'bg-brand-green text-white': selectedOptions[index],
+                },
+              ]"
+              @click="goToQuestion(index)"
+            >
+
+              {{ index + 1 }}
+            </button>
+
+          </div>
+
+        </template>
+
       </template>
 
       <template v-else-if="status === 'pending'">
-        
+
         <div class="m-a flex flex-col items-center gap-4 text-orange">
-          
+
           <span class="i-hugeicons:reload size-8 animate-spin" />
-          
+
           <p class="text-xl font-semibold">
-            
+
             Fetching Assessment...
           </p>
-          
+
         </div>
-        
+
       </template>
 
       <template v-if="status === 'error'">
-        
+
         <div class="m-a flex flex-col items-center gap-4 text-red">
-          
+
           <span class="i-hugeicons:alert-02 size-8" />
-          
+
           <p class="text-xl font-semibold">
-            
+
             Error Fetching Assessment
           </p>
-          
+
           <button
             type="button"
             class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
             @click="refresh()"
           >
-          
+
             Retry
           </button>
-          
+
         </div>
-        
+
       </template>
 
       <template v-if="!assessment && status === 'success'">
-        
+
         <div class="m-a flex flex-col items-center gap-4">
-          
+
           <span class="i-hugeicons:database size-8 op-40" />
-          
+
           <p class="text-xl font-semibold op-40">
-            
+
             Assessment not Found
           </p>
-          
+
         </div>
-        
+
+      </template>
+
+      <template v-if="assessment?.status === 'completed'">
+
+        <div class="m-a flex flex-col items-center gap-4 text-brand-green">
+
+          <span class="i-hugeicons:hourglass-off size-8" />
+
+          <p class="text-xl font-semibold">
+
+            Assessment Ended
+          </p>
+
+        </div>
+
+      </template>
+
+      <template v-if="assessment?.status === 'upcoming'">
+
+        <div class="m-a flex flex-col items-center gap-4 text-orange">
+
+          <span class="i-hugeicons:hourglass size-8" />
+
+          <p class="text-xl font-semibold">
+
+            Assessment Not Started
+          </p>
+
+        </div>
+
       </template>
 
       <ModalsAssessmentRegistration />
-      
+
     </template>
-    
+
   </Layout>
-  
+
 </template>
 
 <script setup lang="ts">
@@ -253,28 +323,61 @@
 const { assessmentId } = useRoute().params
 const { accessCode } = useRoute().query
 const currentQuestionIndex = ref(0)
-const selectedOptions = ref<string[]>
-([])
+const selectedOptions = ref<string[]>([])
+const timerInterval = ref<NodeJS.Timeout>()
+const timer = reactive({
+  hour: 0,
+  minute: 0,
+})
+
 const candidateBio = ref<{
   name: string
   id: string
   email: string
+  department: string
 }>
 ()
 
 const { data: assessment, status, refresh } = await useAsyncData(
   'assessment',
   () =>
-    $fetch(`/api/assessment?assessmentId=${assessmentId}&accessCode=${accessCode}`),
-  {
-    server: false,
-  },
+    $fetch(`/api/assessment?assessmentId=${assessmentId}&accessCode=${accessCode}`, { method: 'get', timeout: 30000 }),
 )
+
+const startTimer = () => {
+  const remainingTimeMins = calcRemTime(
+    formatDateTime(assessment.value?.date_time as string).formattedTime,
+    assessment.value?.duration_mins as number,
+  )
+
+  if (remainingTimeMins > 0) {
+    timer.hour = Math.floor(remainingTimeMins / 60)
+    timer.minute = remainingTimeMins % 60
+  }
+  else {
+    return clearInterval(timerInterval.value)
+  }
+
+  timerInterval.value = setInterval(() => {
+
+    if (timer.minute === 0 && timer.hour > 0) {
+      timer.minute = 59
+      timer.hour--
+    }
+    else if (timer.hour === 0 && timer.minute === 0) {
+      return clearInterval(timerInterval.value)
+    }
+
+    timer.minute--
+
+  }, 60000)
+}
 
 const candidateBioStorageKey = `${assessmentId}-bio`
 const selectedOptionsStorageKey = `${assessmentId}-selectedOptions`
 
-onMounted(() => {
+onNuxtReady(() => {
+
   const storedCandidateBio = localStorage.getItem(candidateBioStorageKey)
   const storedSelectedOptions = localStorage.getItem(selectedOptionsStorageKey)
 
@@ -286,14 +389,13 @@ onMounted(() => {
     candidateBio.value = JSON.parse(storedCandidateBio)
   }
 
-  if (!candidateBio.value?.email || !candidateBio.value?.id || !candidateBio.value?.name) {
+  if ((assessment.value?.status === 'ongoing') && (!candidateBio.value?.email || !candidateBio.value?.id || !candidateBio.value?.name || !candidateBio.value?.department)) {
     useModals('assessmentRegistration', 'open')
   }
 
-  persistAccessCode()
-})
+  if (assessment.value?.status === 'ongoing') return startTimer()
 
-onBeforeUnmount(() => persistAccessCode())
+})
 
 watch(selectedOptions, (newValue) => {
   localStorage.setItem(selectedOptionsStorageKey, JSON.stringify(newValue))
@@ -302,19 +404,4 @@ watch(selectedOptions, (newValue) => {
 function goToQuestion(index: number) {
   currentQuestionIndex.value = index
 }
-
-function persistAccessCode() {
-  if (accessCode) {
-    const url = new URL(window.location.href)
-    url.searchParams.set('accessCode', accessCode as string)
-    useRoute().query.accessCode = accessCode
-    window.history.replaceState(null, '', url.toString())
-  }
-}
-
-watch(status, (newStatus) => {
-  if (newStatus === 'success' || newStatus === 'error') {
-    persistAccessCode()
-  }
-})
 </script>

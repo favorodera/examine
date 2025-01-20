@@ -57,6 +57,7 @@ export type Database = {
         Row: {
           answers: string[]
           assessment_id: string
+          candidate_department: string
           candidate_email: string
           candidate_id: string
           instructor_id: string
@@ -69,6 +70,7 @@ export type Database = {
         Insert: {
           answers: string[]
           assessment_id: string
+          candidate_department: string
           candidate_email: string
           candidate_id: string
           instructor_id: string
@@ -81,6 +83,7 @@ export type Database = {
         Update: {
           answers?: string[]
           assessment_id?: string
+          candidate_department?: string
           candidate_email?: string
           candidate_id?: string
           instructor_id?: string

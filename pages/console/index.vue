@@ -2,37 +2,29 @@
 
   <Layout>
 
-    <template #nav>
+    <template #homeNav>
 
-      <nav class="shadowed sticky z-1 w-full flex justify-center bg-white p-4">
+      <NuxtLink
+        to="/"
+        class="flex items-center gap-1"
+      >
+        <span class="i-hugeicons:school-report-card size-8 text-brand-green" />
+        <p class="text-lg font-semibold">Examine</p>
 
-        <div class="max-w-360 w-full flex items-center justify-between">
+      </NuxtLink>
 
-          <NuxtLink
-            to="/"
-            class="flex items-center gap-1"
-          >
-            <span class="i-hugeicons:school-report-card size-8 text-brand-green" />
-            <p class="text-lg font-semibold">Examine</p>
+      <button
+        type="button"
+        class="size-8 overflow-hidden b b-brand-green rounded-full rounded-md transition-transform duration-500 hover:scale-110"
+      >
 
-          </NuxtLink>
-
-          <button
-            type="button"
-            class="size-8 overflow-hidden b b-brand-green rounded-full rounded-md transition-transform duration-500 hover:scale-110"
-          >
-
-            <img
-              :src="instructor?.user_metadata.picture"
-              :alt="instructor?.email"
-              class="size-full object-cover"
-            >
+        <img
+          :src="instructor?.user_metadata.picture"
+          :alt="instructor?.email"
+          class="size-full object-cover"
+        >
             
-          </button>
-
-        </div>
-
-      </nav>
+      </button>
 
     </template>
 
@@ -69,7 +61,7 @@
         </template>
 
         <template
-          v-if="status === 'pending'"
+          v-if="status === 'pending' && !assessments"
           #loading
         >
 

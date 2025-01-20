@@ -25,6 +25,7 @@ type AssessmentDetails = {
     remark: string | null
     time_spent_mins: number
     candidate_email: string
+    candidate_department: string
   }[]
   questions: {
     questions: {
@@ -48,6 +49,7 @@ type CandidateDetails = {
   time_spent_mins: number
   remark: string
   candidate_email: string
+  candidate_department: string
   answers: string[]
   assessments: {
     status: string

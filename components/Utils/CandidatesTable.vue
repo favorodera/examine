@@ -25,6 +25,24 @@
             <button
               type="button"
               class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
+              @click="sort('candidate_department')"
+            >
+              <span>Department</span>
+              <span
+                class="size-4 shrink-0"
+                :class="{
+                  'i-hugeicons:arrow-up-02': sortOrder === 'asc' && sortBy === 'candidate_department',
+                  'i-hugeicons:arrow-down-02': sortOrder === 'desc' && sortBy === 'candidate_department',
+                  'i-hugeicons:arrow-up-down': sortOrder === null && sortBy === 'candidate_department' || sortBy !== 'candidate_department',
+                }"
+              />
+            </button>
+          </th>
+
+          <th class="select-none p-2">
+            <button
+              type="button"
+              class="w-max flex items-center justify-center gap-2 rounded-md px-2 py-1 outline-0 duration-500 ease property-background-color hover:bg-brand-gray/20"
               @click="sort('candidate_email')"
             >
               <span>Email</span>
@@ -126,6 +144,9 @@
               </NuxtLink>
             </td>
             <td class="p-3">
+              {{ candidate.candidate_department }}
+            </td>
+            <td class="p-3">
               {{ candidate.candidate_email }}
             </td>
             <td class="p-3">
@@ -150,7 +171,7 @@
 
           <tr>
             <td
-              colspan="6"
+              colspan="7"
               class="p-3"
             >
 
@@ -184,7 +205,7 @@
 
         <template v-else>
           <tr>
-            <td colspan="6">
+            <td colspan="7">
               <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
                 <span class="i-hugeicons:database size-8" />
                 <p class="text-sm font-semibold">
@@ -212,6 +233,7 @@ const sortBy = ref<keyof {
   remark: string
   time_spent_mins: number
   candidate_email: string
+  candidate_department: string
 } | null>(null)
 const sortOrder = ref<'asc' | 'desc' | null>(null)
 
@@ -227,6 +249,7 @@ const sort = (field: keyof {
   remark: string
   time_spent_mins: number
   candidate_email: string
+  candidate_department: string
 }) => {
   if (sortBy.value === field) {
     if (sortOrder.value === null) {
@@ -255,7 +278,7 @@ const filteredCandidates = computed(() => {
     || candidate.name.toLowerCase().includes(query)
     || candidate.score.toString().includes(query)
     || candidate.time_spent_mins.toString().includes(query)
-    || candidate.remark.toLowerCase().includes(query),
+    || candidate.remark?.toLowerCase().includes(query),
   )
 })
 
@@ -265,8 +288,8 @@ const filteredAndSortedCandidates = computed(() => {
   }
 
   return [...filteredCandidates.value].sort((a, b) => {
-    const aValue = a[sortBy.value!]
-    const bValue = b[sortBy.value!]
+    const aValue = a[sortBy.value!]!
+    const bValue = b[sortBy.value!]!
 
     const modifier = sortOrder.value === 'asc' ? 1 : -1
 

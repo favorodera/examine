@@ -1,5 +1,5 @@
 <template>
-    
+
   <Layout>
 
     <template
@@ -7,67 +7,60 @@
       #nav
     >
 
-      <nav class="shadowed sticky z-1 w-full flex justify-center bg-white p-4">
+      <div class="w-full flex items-center justify-between gap-4">
 
-        <div class="max-w-360 w-full flex flex-col items-center justify-between gap-2">
+        <h1 class="text-2xl font-semibold">
+          Candidate Overview
+        </h1>
 
-          <div class="w-full flex items-center justify-between gap-4">
+        <button
+          type="button"
+          class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+          @click="navigateTo('/console')"
+        >
+          Print
+        </button>
 
-            <h1 class="text-2xl font-semibold">
-              Candidate Overview
-            </h1>
+      </div>
 
-            <button
-              type="button"
-              class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="navigateTo('/console')"
-            >
-              Print
-            </button>
+      <div class="w-full flex items-center justify-between gap-4">
 
-          </div>
+        <div class="flex flex-col gap-1">
 
-          <div class="w-full flex items-center justify-between gap-4">
+          <p class="line-clamp-1 text-sm font-medium">
+            Examination: {{ candidateDetails.assessments.assessment_name }}
+          </p>
 
-            <div class="flex flex-col gap-1">
-
-              <p class="line-clamp-1 text-sm font-medium">
-                Examination: {{ candidateDetails.assessments.assessment_name }}
-              </p>
-
-              <p class="text-sm text-brand-gray font-medium">
-                Duration: {{ candidateDetails.assessments.duration_mins }} minutes
-              </p>
-
-            </div>
-
-            <div class="w-max flex flex-col gap-1">
-
-              <p class="w-max text-sm font-medium">
-                Status: {{ candidateDetails.assessments.status }}
-              </p>
-
-              <p class="w-max text-sm text-brand-gray font-medium">
-                Date: {{ formatDate(candidateDetails.assessments.date_time) }} UTC
-              </p>
-
-            </div>
-
-          </div>
+          <p class="text-sm text-brand-gray font-medium">
+            Duration: {{ candidateDetails.assessments.duration_mins }} minutes
+          </p>
 
         </div>
 
-      </nav>
+        <div class="w-max flex flex-col gap-1">
+
+          <p class="w-max text-sm font-medium">
+            Status: {{ candidateDetails.assessments.status }}
+          </p>
+
+          <p class="w-max text-sm text-brand-gray font-medium">
+            Date: {{ `${formatDateTime(candidateDetails.assessments.date_time).formattedDate}
+                ${formatDateTime(candidateDetails.assessments.date_time).formattedTime}` }} UTC
+          </p>
+
+        </div>
+
+      </div>
 
     </template>
 
     <template #body>
-      
+
       <CandidateDetails
-        :candidate-details="candidateDetails "
+        :candidate-details="candidateDetails"
         :status="status"
       >
-    
+
         <template
           v-if="status === 'error'"
           #error
@@ -120,7 +113,7 @@
 
 <script setup lang="ts">
 const { assessmentId, candidateId } = useRoute().params
-  
+
 const { data: candidateDetails, status, refresh } = await useAsyncData(
   'candidate',
   () => $fetch(`/api/candidate-details?assessmentId=${assessmentId}&candidateId=${candidateId}`, { method: 'GET', timeout: 30000 }),

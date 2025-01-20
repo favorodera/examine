@@ -20,6 +20,10 @@
             ID: {{ candidateDetails.candidate_id }}
           </p>
 
+          <p class="text-lg font-medium">
+            Department: {{ candidateDetails.candidate_department }}
+          </p>
+
         </div>
       </div>
 

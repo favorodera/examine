@@ -2,7 +2,7 @@
 
   <Layout>
 
-    <template #nav>
+    <template #homeNav>
 
       <HomeNav />
 

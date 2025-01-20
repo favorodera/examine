@@ -106,12 +106,12 @@
               ID: {{ bestCandidate?.candidate_id }}
             </p>
 
-            <p>
-              Score: {{ bestCandidate?.score }}%
+            <p class="line-clamp-1">
+              Department: {{ bestCandidate?.candidate_department }}
             </p>
 
             <p>
-              Time Spent: {{ bestCandidate?.time_spent_mins }}mins
+              Score: {{ bestCandidate?.score }}%
             </p>
 
           </div>
@@ -134,12 +134,12 @@
               ID: {{ worstCandidate?.candidate_id }}
             </p>
 
-            <p>
-              Score: {{ worstCandidate?.score }}%
+            <p class="line-clamp-1">
+              Department: {{ worstCandidate?.candidate_department }}
             </p>
 
             <p>
-              Time Spent: {{ worstCandidate?.time_spent_mins }}mins
+              Score: {{ worstCandidate?.score }}%
             </p>
 
           </div>

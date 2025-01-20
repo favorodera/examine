@@ -1,8 +1,8 @@
 <template>
 
   <main class="w-full flex flex-col gap-4">
-    
-    <template v-if="status === 'success'">
+
+    <template v-if=" filteredAssessments.length > 0 ||status === 'success'">
 
       <div class="w-full flex items-center justify-between gap-4">
 
@@ -22,7 +22,7 @@
 
     </template>
 
-    <template v-if=" status === 'success'">
+    <template v-if=" filteredAssessments.length > 0 || status === 'success'">
 
       <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] w-full gap-4">
 
@@ -34,7 +34,7 @@
           <span class="i-hugeicons:plus-sign-square size-20 op-10" />
         </button>
 
-        <template v-if="filteredAssessments.length > 0 && status === 'success'">
+        <template v-if="filteredAssessments.length > 0">
 
           <NuxtLink
             v-for="(assessment, index) in filteredAssessments.slice(splitter.start, splitter.end)"
@@ -60,20 +60,21 @@
                 v-else
                 class="size-3 animate-pulse rounded-full bg-brand-green"
               />
-    
+
             </div>
 
             <div class="text-base">
-              <p>Date: {{ formatDate(assessment.date_time) }} UTC</p>
+              <p>
+                Date: {{ `${formatDateTime(assessment.date_time).formattedDate}
+                ${formatDateTime(assessment.date_time).formattedTime}` }} UTC
+              </p>
               <p>Candidates: {{ assessment.candidates[0].count }}</p>
               <p>Duration: {{ assessment.duration_mins }} mins.</p>
             </div>
 
           </NuxtLink>
 
-          <div
-            class="col-span-full mt-8 flex items-center justify-center gap-4"
-          >
+          <div class="col-span-full mt-8 flex items-center justify-center gap-4">
             <button
               type="button"
               class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
@@ -84,7 +85,8 @@
             </button>
 
             <p class="text-center text-sm text-gray">
-              {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAssessments.length) }} of {{ filteredAssessments.length }} Assessments
+              {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAssessments.length) }} of {{
+                filteredAssessments.length }} Assessments
             </p>
 
             <button

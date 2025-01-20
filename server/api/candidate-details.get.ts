@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const { data: candidateDetails, error } = await serverClient
       .from('candidates')
       .select(`
-        candidate_id, name, score, time_spent_mins, remark, candidate_email,answers,
+        candidate_id, name, score, time_spent_mins, remark, candidate_email,answers, candidate_department,
         assessments (
           duration_mins, marks_obtainable, assessment_name, status, date_time,
           correct_answers(correct_answers),
