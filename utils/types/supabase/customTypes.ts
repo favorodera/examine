@@ -78,6 +78,7 @@ type CandidateDetails = {
 type Assessment = {
   access_code: string
   assessment_id: string
+  instructor_id: string
   assessment_name: string
   date_time: string
   duration_mins: number

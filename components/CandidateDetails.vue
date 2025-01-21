@@ -116,7 +116,7 @@
 
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,30rem),1fr))] w-full gap-8">
           <div
-            v-for="question in candidateDetails.assessments.questions.questions"
+            v-for="question in candidateDetails.assessments.questions.questions.slice(splitter.start, splitter.end)"
             :key="question.id"
             class="shadowed relative w-full flex flex-col gap-3 rounded-3.5 bg-white p-8"
           >
@@ -167,13 +167,13 @@
           </button>
 
           <p class="text-center text-sm text-gray">
-            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, candidateDetails.answers.length) }} of {{ candidateDetails.answers.length }} Answers
+            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, candidateDetails.assessments.questions.questions.length) }} of {{ candidateDetails.assessments.questions.questions.length }} Questions
           </p>
 
           <button
             type="button"
             class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.end >= candidateDetails.answers.length"
+            :disabled="splitter.end >= candidateDetails.assessments.questions.questions.length"
             @click="paginateQuestions('next')"
           >
             <span class="i-hugeicons:arrow-right-02 size-4" />
@@ -227,9 +227,9 @@ const splitter = reactive({
 })
 
 function paginateQuestions(direction: 'next' | 'prev') {
-  const totalAnswers = props.candidateDetails?.answers.length ?? 0
+  const totalQuestions = props.candidateDetails?.assessments.questions.questions.length ?? 0
   if (direction === 'next') {
-    if (splitter.end < totalAnswers) {
+    if (splitter.end < totalQuestions) {
       splitter.start += 6
       splitter.end += 6
     }

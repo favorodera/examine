@@ -2,11 +2,7 @@ type ModalsState = {
   newAssessment: boolean
   newQuestion: boolean
   assessmentRegistration: boolean
+  submitAssessment: boolean
 }
 
-type CreateUpdateState = {
-  assessment: boolean
-  question: boolean
-}
-
-export type { ModalsState, CreateUpdateState }
+export type { ModalsState }

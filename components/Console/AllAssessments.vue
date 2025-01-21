@@ -2,7 +2,7 @@
 
   <main class="w-full flex flex-col gap-4">
 
-    <template v-if=" filteredAssessments.length > 0 ||status === 'success'">
+    <template v-if=" filteredAssessments.length > 0 || status === 'success'">
 
       <div class="w-full flex items-center justify-between gap-4">
 
@@ -58,7 +58,7 @@
 
               <span
                 v-else
-                class="size-3 animate-pulse rounded-full bg-brand-green"
+                class="size-3 shrink-0 animate-pulse rounded-full bg-brand-green"
               />
 
             </div>

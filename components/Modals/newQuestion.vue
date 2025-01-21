@@ -18,14 +18,12 @@
       <div
         v-if="useModalsState().newQuestion"
         class="fixed inset-0 z-3 overflow-y-auto"
-        @click="useModals('newQuestion', 'close')"
       >
         <div class="h-screen flex items-center justify-center p-4">
           <form
             method="dialog"
             class="max-w-md w-full flex flex-col gap-6 rounded-4 bg-white px-4 py-8"
             @submit.prevent="execute()"
-            @click.stop
           >
         
             <h1 class="text-center text-xl font-semibold">
@@ -82,7 +80,7 @@
                   id="correct-option"
                   v-model="form.correctOption"
                   name="correct-option"
-                  class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none"
+                  class="w-full flex-1 truncate bg-transparent px-4 py-3 uppercase outline-none"
                   required
                   type="text"
                   placeholder="B"

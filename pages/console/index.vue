@@ -61,7 +61,7 @@
         </template>
 
         <template
-          v-if="status === 'pending' && !assessments"
+          v-if="status === 'pending' && assessments?.length === 0"
           #loading
         >
 

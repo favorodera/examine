@@ -87,7 +87,7 @@
         </template>
 
         <template
-          v-if="status === 'pending'"
+          v-if="status === 'pending' && !assessment"
           #loading
         >
 
@@ -114,12 +114,35 @@
 </template>
 
 <script setup lang="ts">
+import type { RealtimeChannel } from '@supabase/realtime-js'
+
+const client = useSupabaseClient()
 const { assessmentId } = useRoute().params
+const questionsChannel = ref<RealtimeChannel>()
 
 const { data: assessment, refresh: refreshAssessmentDetails, status } = await useAsyncData(
   'assessment-details',
   () => $fetch(`/api/assessment-details?assessmentId=${assessmentId}`, { method: 'get', timeout: 30000 }),
   { server: false },
 )
+
+onMounted(() => {
+
+  questionsChannel.value = client.channel('questions')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'questions' },
+      () => refreshAssessmentDetails(),
+      
+    )
+    .subscribe()
+
+})
+
+onUnmounted(() => {
+
+  client.removeChannel(questionsChannel.value!)
+
+})
 
 </script>

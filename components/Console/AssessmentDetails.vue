@@ -1,6 +1,6 @@
 <template>
 
-  <template v-if="assessment && status === 'success'">
+  <template v-if="(assessment) || (assessment && status === 'success')">
 
     <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,27rem),1fr))] w-full gap-8">
 

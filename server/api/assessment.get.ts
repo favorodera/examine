@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       .from('assessments')
       .select(
         `
-        access_code, assessment_id, assessment_name, date_time, duration_mins, marks_obtainable, status,
+        access_code, assessment_id, assessment_name, date_time, duration_mins, marks_obtainable, status, instructor_id,
         questions(questions)
       `,
       )

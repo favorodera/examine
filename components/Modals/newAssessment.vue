@@ -18,14 +18,12 @@
       <div
         v-if="useModalsState().newAssessment"
         class="fixed inset-0 z-3 overflow-y-auto"
-        @click="useModals('newAssessment', 'close')"
       >
         <div class="h-screen flex items-center justify-center p-4">
           <form
             method="dialog"
             class="max-w-md w-full flex flex-col gap-6 rounded-4 bg-white px-4 py-8"
             @submit.prevent="execute()"
-            @click.stop
           >
             <h1 class="text-center text-xl font-semibold">
               New Assessment
@@ -34,7 +32,7 @@
             <label
               for="name"
             >
-              Name
+              Title
               <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
                 <span class="i-hugeicons:edit-01 size-5 shrink-0" />
                 <input

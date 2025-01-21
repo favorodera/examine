@@ -15,9 +15,10 @@
         </h1>
 
         <button
+          v-if="assessment.status === 'ongoing'"
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-          @click="navigateTo('/console')"
+          @click="useModals('submitAssessment', 'open')"
         >
 
           Submit
@@ -100,34 +101,35 @@
 
           </div>
 
-          <div class="aspect-square size-30 flex items-center justify-center b-4 b-brand-green rounded-full p-4">
+          <div class="relative aspect-square size-40 flex items-center justify-center rounded-full p-2">
+            <div class="absolute inset-0 size-40 animate-pulse rounded-full bg-brand-green" />
 
-            <div class="flex gap-1">
+            <div class="z-2 size-full flex flex-col items-center justify-center gap-1 rounded-full bg-white p-4">
 
-              <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2">
                 <p class="text-2xl font-bold">
                   {{ timer.hour < 10 ? `0${timer.hour}` : timer.hour }}
                 </p>
-                <p class="text-center">
-                  H
+                
+                <p class="text-2xl font-bold">
+                  :
                 </p>
-              </div>
-
-              <p class="text-2xl font-bold">
-                :
-              </p>
-
-              <div class="flex flex-col gap-2">
+              
                 <p class="text-2xl font-bold">
                   {{ timer.minute < 10 ? `0${timer.minute}` : timer.minute }}
                 </p>
-                <p class="text-center">
+                
+              </div>
+
+              <div class="w-1/2 flex justify-between gap-2">
+                <p class="text-center text-lg font-semibold">
+                  H
+                </p>
+                <p class="text-center text-lg font-semibold">
                   M
                 </p>
               </div>
-
             </div>
-
           </div>
 
         </div>
@@ -311,6 +313,10 @@
       </template>
 
       <ModalsAssessmentRegistration />
+      <ModalsSubmitConfirmation
+        :assessment-id="assessment?.assessment_id"
+        :instructor-id="assessment?.instructor_id"
+      />
 
     </template>
 
@@ -335,8 +341,7 @@ const candidateBio = ref<{
   id: string
   email: string
   department: string
-}>
-()
+}>()
 
 const { data: assessment, status, refresh } = await useAsyncData(
   'assessment',
