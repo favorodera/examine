@@ -4,7 +4,7 @@
    
     <nav
       v-if="$slots.nav"
-      class="shadowed sticky top-0 z-1 w-full flex justify-center bg-white p-4"
+      class="shadowed sticky top-0 z-1 w-full flex justify-center bg-white p-4 print:hidden"
     >
 
       <div class="max-w-360 w-full flex flex-col items-center justify-between gap-2">

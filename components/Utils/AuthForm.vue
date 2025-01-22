@@ -78,23 +78,17 @@
       <button
         type="submit"
         :disabled="magicLinkStatus === 'sending' || magicLinkStatus === 'sent'"
-        class="w-max flex flex-col items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
+        class="w-max flex items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
       >
-        <div class="flex items-center gap-2">
-          {{ magicLinkStatus === 'sent' ? `Magic Link Sent` : magicLinkStatus === 'sending' ? 'Sending...' : 'Send Magic Link' }}
+        {{ magicLinkStatus === 'sent' ? `Resend in ${countdownTime} seconds.` : magicLinkStatus === 'sending' ? 'Sending...' : 'Send Magic Link' }}
   
-          <span
-            :class="{
-              'animate-spin i-hugeicons:reload size-5': magicLinkStatus === 'sending',
-              'i-hugeicons:checkmark-circle-02 size-5': magicLinkStatus === 'sent',
+        <span
+          :class="{
+            'animate-spin i-hugeicons:reload size-5': magicLinkStatus === 'sending',
   
-            }"
-          />
-        </div>
+          }"
+        />
   
-        <p v-if="magicLinkStatus === 'sent'">
-          Get another in {{ countdownTime }} secs.
-        </p>
       </button>
   
     </form>
@@ -113,6 +107,13 @@ const callMagicLink = () => {
   magicLink(email.value)
     .then(() => {
       magicLinkStatus.value = 'sent'
+
+      createNotification(
+        'Magic Link Sent',
+        'i-hugeicons:checkmark-circle-02',
+        5000,
+        'success',
+      )
   
       const interval = setInterval(() => {
         if (countdownTime.value > 0) {
@@ -124,8 +125,14 @@ const callMagicLink = () => {
         }
       }, 1000)
     })
-    .catch(() => {
+    .catch((error: Error) => {
       magicLinkStatus.value = 'error'
+      createNotification(
+        error.message,
+        'i-hugeicons:cancel-circle',
+        5000,
+        'error',
+      )
     })
 }
 </script>

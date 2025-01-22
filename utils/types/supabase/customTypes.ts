@@ -3,7 +3,7 @@ type AllAssessments = {
   assessment_name: string
   date_time: string
   duration_mins: number
-  status: string | null
+  status: 'ongoing' | 'upcoming' | 'ended'
   candidates: {
     count: number
   }[]
@@ -17,7 +17,7 @@ type AssessmentDetails = {
   pass_mark: number
   date_time: string
   duration_mins: number
-  status: string | null
+  status: 'ongoing' | 'upcoming' | 'ended'
   candidates: {
     candidate_id: string
     name: string
@@ -83,7 +83,7 @@ type Assessment = {
   date_time: string
   duration_mins: number
   marks_obtainable: number
-  status: string
+  status: 'ongoing' | 'upcoming' | 'ended'
   questions: {
     questions: {
       id: number

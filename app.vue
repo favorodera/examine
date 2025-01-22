@@ -6,6 +6,8 @@
 
     <NuxtPage />
 
+    <UtilsNotification />
+
   </main>
 
 </template>

@@ -16,7 +16,7 @@
         <button
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-          @click="navigateTo('/console')"
+          @click="print()"
         >
           Print
         </button>
@@ -119,4 +119,6 @@ const { data: candidateDetails, status, refresh } = await useAsyncData(
   () => $fetch(`/api/candidate-details?assessmentId=${assessmentId}&candidateId=${candidateId}`, { method: 'GET', timeout: 30000 }),
   { server: false },
 )
+
+const print = () => window.print()
 </script>

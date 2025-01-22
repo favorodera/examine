@@ -5,4 +5,12 @@ type ModalsState = {
   submitAssessment: boolean
 }
 
-export type { ModalsState }
+type Notifications = {
+  message: string | undefined
+  icon: string | undefined
+  timeoutMs: number | undefined
+  type: 'warning' | 'error' | 'success' | undefined
+  state: 'open' | 'closed'
+}
+
+export type { ModalsState, Notifications }
