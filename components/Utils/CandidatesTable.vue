@@ -139,7 +139,7 @@
             class="b-b border-brand-gray/20 hover:bg-brand-gray/5"
           >
             <td class="p-3">
-              <NuxtLink :to="`/${useRoute().params.assessmentId}/${candidate.candidate_id}`">
+              <NuxtLink :to="`/${useRoute().params.assessmentId}/${encodeURIComponent(candidate.candidate_id)}` ">
                 {{ candidate.candidate_id }}
               </NuxtLink>
             </td>

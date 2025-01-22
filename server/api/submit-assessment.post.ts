@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     id,
     department,
     email,
-    answers,
+    selectedOptions,
     assessmentId,
     instructorId,
   }: {
@@ -17,11 +17,11 @@ export default defineEventHandler(async (event) => {
     id: string
     department: string
     email: string
-    answers: string[]
+    selectedOptions: string[]
     instructorId: string
   } = await readBody(event)
     
-  if (!name && !id && !department && !email && !answers && !assessmentId) {
+  if (!name && !id && !department && !email && !selectedOptions && !assessmentId) {
     return sendError(event, createError({ statusCode: 500, statusMessage: 'Bad Request', message: 'Invalid Request' }))
   }
     
@@ -34,10 +34,9 @@ export default defineEventHandler(async (event) => {
         instructor_id: instructorId,
         candidate_department: department,
         candidate_email: email,
-        answers: answers,
+        answers: selectedOptions,
         assessment_id: assessmentId,
         name: name,
-        score: 0,
       })
       
     if (error) {

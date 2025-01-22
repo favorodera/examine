@@ -21,7 +21,7 @@
       >
         <div class="h-screen flex items-center justify-center p-4">
 
-          <div class="max-w-md min-h-50 w-full flex flex-col justify-between gap-6 rounded-4 bg-white px-4 py-8">
+          <div class="max-w-md min-h-50 w-full flex flex-col items-center justify-between gap-6 rounded-4 bg-white px-4 py-8">
 
             <template v-if="status === 'success'">
 
@@ -42,7 +42,7 @@
               </p>
 
               <div
-                class="flex gap-4"
+                class="w-full flex gap-4"
               >
                 <button
                   type="button"
@@ -120,6 +120,8 @@ watch(status, (newStatus) => {
   if (newStatus === 'success') {
     setTimeout(() => {
       useModals('submitAssessment', 'close')
+      localStorage.removeItem(`${props.assessmentId}-bio`)
+      localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
     }, 3000)
   }
 })
