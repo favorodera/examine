@@ -104,7 +104,7 @@
           <div class="relative aspect-square size-40 flex items-center justify-center rounded-full p-2">
             <div class="absolute inset-0 size-40 animate-pulse rounded-full bg-brand-green" />
 
-            <div class="z-2 size-full flex flex-col items-center justify-center gap-1 rounded-full bg-white p-4">
+            <div class="z-0 size-full flex flex-col items-center justify-center gap-1 rounded-full bg-white p-4">
 
               <div class="flex items-center gap-2">
                 <p class="text-2xl font-bold">
