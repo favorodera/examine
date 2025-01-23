@@ -143,9 +143,8 @@
                   {{ status === 'pending' ? 'Creating' : status === 'error' ? 'Retry': 'Submit' }}
         
                   <span
-                    class="hidden"
                     :class="{
-                      'inline-block animate-spin i-hugeicons:reload size-5': status === 'pending',
+                      'animate-spin i-hugeicons:reload size-5': status === 'pending',
                     }"
                   />
                 </div>

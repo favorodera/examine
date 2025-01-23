@@ -105,7 +105,7 @@
 
       </ConsoleAssessmentDetails>
 
-      <ModalsNewQuestion />
+      <ModalsNewQuestion :remaining-marks-obtainable="remainingMarksObtainable" />
 
     </template>
 
@@ -126,6 +126,17 @@ const { data: assessment, refresh: refresh, status, clear } = await useAsyncData
   () => $fetch(`/api/assessment-details?assessmentId=${assessmentId}`, { method: 'get', timeout: 30000 }),
   { server: false },
 )
+
+const remainingMarksObtainable = computed(() => {
+  const marksObtainable = assessment.value?.marks_obtainable
+  const marksAssignedToQuestions = ref<number>()
+
+  const marksAssignedToQuestionsArray = assessment.value?.questions.questions.map(question => question.marks_obtainable)
+
+  marksAssignedToQuestions.value = marksAssignedToQuestionsArray?.reduce((sum, mark) => sum + mark, 0)
+
+  return marksObtainable! - marksAssignedToQuestions.value!
+})
 
 onMounted(() => {
 
