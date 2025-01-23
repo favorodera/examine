@@ -22,9 +22,9 @@
 
     </template>
 
-    <template v-if=" filteredAssessments.length > 0 || status === 'success'">
+    <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] w-full gap-4">
 
-      <section class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] w-full gap-4">
+      <template v-if="filteredAssessments.length > 0 || status === 'success'">
 
         <button
           type="button"
@@ -34,45 +34,45 @@
           <span class="i-hugeicons:plus-sign-square size-20 op-10" />
         </button>
 
-        <template v-if="filteredAssessments.length > 0">
+        <NuxtLink
+          v-for="(assessment, index) in filteredAssessments.slice(splitter.start, splitter.end).reverse()"
+          :key="index"
+          :to="`/console/${assessment.assessment_id}`"
+          class="shadowed w-full flex flex-col gap-2 rounded-lg bg-white p-4 duration-500 ease property-transform hover:scale-101"
+        >
 
-          <NuxtLink
-            v-for="(assessment, index) in filteredAssessments.slice(splitter.start, splitter.end)"
-            :key="index"
-            :to="`/console/${assessment.assessment_id}`"
-            class="shadowed w-full flex flex-col gap-2 rounded-lg bg-white p-4 duration-500 ease property-transform hover:scale-101"
-          >
+          <div class="flex items-center justify-between gap-4">
 
-            <div class="flex items-center justify-between gap-4">
+            <h2 class="truncate text-xl font-semibold">{{ assessment.assessment_name }}</h2>
 
-              <h2 class="truncate text-xl font-semibold">{{ assessment.assessment_name }}</h2>
+            <span
+              v-if="assessment.status === 'ended' || assessment.status === 'upcoming'"
+              class="size-5 shrink-0"
+              :class="{
+                'i-hugeicons:checkmark-circle-02  text-brand-green': assessment.status === 'ended',
+                'i-hugeicons:hourglass text-orange': assessment.status === 'upcoming',
+              }"
+            />
 
-              <span
-                v-if="assessment.status === 'completed' || assessment.status === 'upcoming'"
-                class="size-5"
-                :class="{
-                  'i-hugeicons:checkmark-circle-02  text-brand-green': assessment.status === 'completed',
-                  'i-hugeicons:hourglass text-orange': assessment.status === 'upcoming',
-                }"
-              />
+            <span
+              v-else
+              class="size-3 shrink-0 animate-pulse rounded-full bg-brand-green"
+            />
 
-              <span
-                v-else
-                class="size-3 shrink-0 animate-pulse rounded-full bg-brand-green"
-              />
+          </div>
 
-            </div>
-
-            <div class="text-base">
-              <p>
-                Date: {{ `${formatDateTime(assessment.date_time).formattedDate}
+          <div class="text-base">
+            <p>
+              Date: {{ `${formatDateTime(assessment.date_time).formattedDate}
                 ${formatDateTime(assessment.date_time).formattedTime}` }} UTC
-              </p>
-              <p>Candidates: {{ assessment.candidates[0].count }}</p>
-              <p>Duration: {{ assessment.duration_mins }} mins.</p>
-            </div>
+            </p>
+            <p>Candidates: {{ assessment.candidates[0].count }}</p>
+            <p>Duration: {{ assessment.duration_mins }} mins.</p>
+          </div>
 
-          </NuxtLink>
+        </NuxtLink>
+
+        <template v-if="filteredAssessments.length > splitter.end">
 
           <div class="col-span-full mt-8 flex items-center justify-center gap-4">
             <button
@@ -98,11 +98,12 @@
               <span class="i-hugeicons:arrow-right-02 size-4" />
             </button>
           </div>
+            
         </template>
 
-      </section>
+      </template>
 
-    </template>
+    </section>
 
     <slot name="error" />
 
@@ -110,11 +111,11 @@
 
     <template v-if="filteredAssessments.length === 0 && status === 'success'">
 
-      <div class="mt-18 flex flex-col items-center gap-4 op-40">
+      <div class="mt-18 flex flex-col items-center gap-2 op-50">
 
-        <span class="i-hugeicons:database size-8" />
+        <span class="i-hugeicons:database size-6" />
 
-        <p class="text-xl font-semibold">
+        <p class="text-lg font-medium">
           No Assessment Found
         </p>
 

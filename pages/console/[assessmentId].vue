@@ -39,7 +39,7 @@
 
         <div class="w-max flex flex-col gap-1">
 
-          <p class="w-max text-sm font-medium">
+          <p class="w-max text-sm font-medium capitalize">
             Status: {{ assessment.status }}
           </p>
 
@@ -66,18 +66,18 @@
           #error
         >
 
-          <div class="m-a flex flex-col items-center gap-4 text-red">
+          <div class="m-a flex flex-col items-center gap-2 text-red">
 
-            <span class="i-hugeicons:alert-02 size-8" />
+            <span class="i-hugeicons:alert-02 size-6" />
 
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Error Fetching Assessment
             </p>
 
             <button
               type="button"
-              class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="refreshAssessmentDetails()"
+              class="rounded-md bg-brand-green px-3 py-1 text-lg text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+              @click="refresh()"
             >
               Retry
             </button>
@@ -87,15 +87,15 @@
         </template>
 
         <template
-          v-if="status === 'pending' && !assessment"
+          v-if="status === 'pending' && assessment === null"
           #loading
         >
 
-          <div class="m-a flex flex-col items-center gap-4 text-orange">
+          <div class="m-a flex flex-col items-center gap-2 text-orange">
 
-            <span class="i-hugeicons:reload size-8 animate-spin" />
+            <span class="i-hugeicons:reload size-6 animate-spin" />
 
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Fetching Assessment...
             </p>
 
@@ -117,10 +117,11 @@
 import type { RealtimeChannel } from '@supabase/realtime-js'
 
 const client = useSupabaseClient()
+
 const { assessmentId } = useRoute().params
 const questionsChannel = ref<RealtimeChannel>()
 
-const { data: assessment, refresh: refreshAssessmentDetails, status } = await useAsyncData(
+const { data: assessment, refresh: refresh, status, clear } = await useAsyncData(
   'assessment-details',
   () => $fetch(`/api/assessment-details?assessmentId=${assessmentId}`, { method: 'get', timeout: 30000 }),
   { server: false },
@@ -128,18 +129,34 @@ const { data: assessment, refresh: refreshAssessmentDetails, status } = await us
 
 onMounted(() => {
 
-  questionsChannel.value = client.channel('questions')
+  questionsChannel.value = client.channel('assessment-details')
     .on(
       'postgres_changes',
-      { event: '*', schema: 'public', table: 'questions' },
-      () => refreshAssessmentDetails(),
-      
+      { event: '*', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'candidates', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'questions', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'correct_answers', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
     )
     .subscribe()
 
 })
 
 onUnmounted(() => {
+
+  clear()
 
   client.removeChannel(questionsChannel.value!)
 

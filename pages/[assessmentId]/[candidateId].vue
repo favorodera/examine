@@ -39,7 +39,7 @@
 
         <div class="w-max flex flex-col gap-1">
 
-          <p class="w-max text-sm font-medium">
+          <p class="w-max text-sm font-medium capitalize">
             Status: {{ candidateDetails.assessments.status }}
           </p>
 

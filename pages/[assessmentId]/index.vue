@@ -282,7 +282,7 @@
 
       </template>
 
-      <template v-if="assessment?.status === 'completed'">
+      <template v-if="assessment?.status === 'ended'">
 
         <div class="m-a flex flex-col items-center gap-4 text-brand-green">
 
@@ -381,7 +381,7 @@ const startTimer = () => {
 const candidateBioStorageKey = `${assessmentId}-bio`
 const selectedOptionsStorageKey = `${assessmentId}-selectedOptions`
 
-onNuxtReady(() => {
+onMounted(() => {
 
   const storedCandidateBio = localStorage.getItem(candidateBioStorageKey)
   const storedSelectedOptions = localStorage.getItem(selectedOptionsStorageKey)

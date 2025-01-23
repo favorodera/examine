@@ -39,19 +39,18 @@
           v-if="status === 'error'"
           #error
         >
+          <div class="mt-18 flex flex-col items-center gap-2 text-red">
 
-          <div class="mt-18 flex flex-col items-center gap-4 text-red">
+            <span class="i-hugeicons:alert-02 size-6" />
 
-            <span class="i-hugeicons:alert-02 size-8" />
-
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Error Fetching Assessments
             </p>
 
             <button
               type="button"
-              class="rounded-md bg-brand-green px-3 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-              @click="refreshAssessments()"
+              class="rounded-md bg-brand-green px-3 py-1 text-lg text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+              @click="refresh()"
             >
               Retry
             </button>
@@ -61,15 +60,15 @@
         </template>
 
         <template
-          v-if="status === 'pending' && assessments?.length === 0"
+          v-if="status === 'pending' && assessments === null"
           #loading
         >
 
-          <div class="mt-18 flex flex-col items-center gap-4 text-orange">
+          <div class="mt-18 flex flex-col items-center gap-2 text-orange">
 
-            <span class="i-hugeicons:reload size-8 animate-spin" />
+            <span class="i-hugeicons:reload size-6 animate-spin" />
 
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Fetching Assessments...
             </p>
 
@@ -94,7 +93,7 @@ const instructor = useSupabaseUser()
 const client = useSupabaseClient()
 const assessmentChannel = ref<RealtimeChannel>()
 
-const { data: assessments, status, refresh: refreshAssessments } = useAsyncData(
+const { data: assessments, status, refresh, clear } = useAsyncData(
   'all-assessments',
   () => $fetch('/api/all-assessments', { method: 'GET', timeout: 30000 }),
   { server: false },
@@ -105,16 +104,18 @@ onMounted(() => {
   assessmentChannel.value = client.channel('assessments')
     .on(
       'postgres_changes',
-      { event: '*', schema: 'public', table: 'assessments' },
-      () => refreshAssessments(),
+      { event: '*', schema: 'public', table: 'assessments', filter: `instructor_id=eq.${instructor.value?.id}` },
+      () => refresh(),
+      
     )
     .subscribe()
 
 })
 
 onUnmounted(() => {
+  clear()
 
   client.removeChannel(assessmentChannel.value!)
-
+  
 })
 </script>

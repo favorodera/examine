@@ -174,31 +174,34 @@
               colspan="7"
               class="p-3"
             >
+              <template v-if="filteredAndSortedCandidates.length > splitter.end">
+                <div class="mt-4 flex items-center justify-end gap-4">
+                  <button
+                    type="button"
+                    class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+                    :disabled="splitter.start === 0"
+                    @click="paginate('prev')"
+                  >
+                    <span class="i-hugeicons:arrow-left-02 size-4" />
+                  </button>
 
-              <div class="mt-4 flex items-center justify-end gap-4">
-                <button
-                  type="button"
-                  class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-                  :disabled="splitter.start === 0"
-                  @click="paginate('prev')"
-                >
-                  <span class="i-hugeicons:arrow-left-02 size-4" />
-                </button>
+                  <p class="text-center text-sm text-brand-gray">
+                    {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAndSortedCandidates.length) }} of {{
+                      filteredAndSortedCandidates.length }} Candidates
+                  </p>
 
-                <p class="text-center text-sm text-brand-gray">
-                  {{ splitter.start + 1 }} to {{ Math.min(splitter.end, filteredAndSortedCandidates.length) }} of {{
-                    filteredAndSortedCandidates.length }} Candidates
-                </p>
+                  <button
+                    type="button"
+                    class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+                    :disabled="splitter.end >= filteredAndSortedCandidates.length"
+                    @click="paginate('next')"
+                  >
+                    <span class="i-hugeicons:arrow-right-02 size-4" />
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-                  :disabled="splitter.end >= filteredAndSortedCandidates.length"
-                  @click="paginate('next')"
-                >
-                  <span class="i-hugeicons:arrow-right-02 size-4" />
-                </button>
-              </div>
+              </template>
+              
             </td>
           </tr>
         </template>
@@ -207,8 +210,8 @@
           <tr>
             <td colspan="7">
               <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
-                <span class="i-hugeicons:database size-8" />
-                <p class="text-sm font-semibold">
+                <span class="i-hugeicons:database size-6" />
+                <p class="text-lg font-medium">
                   No Candidate Found
                 </p>
               </div>

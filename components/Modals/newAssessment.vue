@@ -23,7 +23,7 @@
           <form
             method="dialog"
             class="max-w-md w-full flex flex-col gap-6 rounded-4 bg-white px-4 py-8"
-            @submit.prevent="execute()"
+            @submit.prevent="submitForm()"
           >
             <h1 class="text-center text-xl font-semibold">
               New Assessment
@@ -61,8 +61,11 @@
                   name="date-time"
                   class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none placeholder-brand-dark/50"
                   required
+                  @input="validateDateTime(form.dateTime)"
+                  @blur="validateDateTime(form.dateTime)"
                 >
               </div>
+              <p class="text-sm text-red-500">{{ dateTimeValidationMessage }}</p>
             </label>
         
             <label
@@ -125,7 +128,7 @@
             <div class="flex justify-between gap-4">
               <button
                 type="button"
-                class="w-max flex items-center gap-2 rounded-2 bg-red-500 px-4 py-2 text-white font-normal duration-500 ease property-background-color hover:bg-red-600"
+                class="w-max rounded-2 bg-red-500 px-4 py-2 text-white font-normal duration-500 ease property-background-color hover:bg-red-600"
                 @click="useModals('newAssessment', 'close')"
               >
                 Cancel
@@ -133,16 +136,16 @@
     
               <button
                 type="submit"
-                :disabled="status === 'pending'"
+                :disabled="status === 'pending' || dateTimeValidationMessage !== undefined "
                 class="w-max flex flex-col items-center gap-2 rounded-2 bg-brand-green px-4 py-2 text-white font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
               >
                 <div class="flex items-center gap-2">
-                  {{ status === 'success' ? 'Created' : status === 'pending' ? 'Running' : 'Submit' }}
+                  {{ status === 'pending' ? 'Creating' : status === 'error' ? 'Retry': 'Submit' }}
         
                   <span
+                    class="hidden"
                     :class="{
-                      'animate-spin i-hugeicons:reload size-5': status === 'pending',
-                      'i-hugeicons:checkmark-circle-02 size-5': status === 'success',
+                      'inline-block animate-spin i-hugeicons:reload size-5': status === 'pending',
                     }"
                   />
                 </div>
@@ -157,10 +160,12 @@
   
 <script setup lang="ts">
 import { useModals, useModalsState } from '~/composables/useModals'
+
+const dateTimeValidationMessage = ref<string>()
     
 const form = reactive({
   name: undefined,
-  dateTime: undefined,
+  dateTime: '',
   durationMins: undefined,
   marksObtainable: undefined,
   passMark: undefined,
@@ -182,20 +187,57 @@ const { status, execute } = await useAsyncData(
     immediate: false,
   },
 )
+
+function submitForm() {
+
+  validateDateTime(form.dateTime)
+
+  if (!dateTimeValidationMessage.value) {
+    execute()
+  }
+
+}
       
 watch(status, async (newStatus) => {
   if (newStatus === 'success') {
     useModals('newAssessment', 'close')
+
+    createNotification(
+      'Assessment Created Successfully',
+      'i-hugeicons:checkmark-circle-02',
+      5000,
+      'success',
+    )
+  }
+  else if (newStatus === 'error') {
+    createNotification(
+      'Error Creating Assessment',
+      'i-hugeicons:cross-circle-02',
+      5000,
+      'error',
+    )
   }
 })
   
 watch(useModalsState(), (newState) => {
   if (newState.newAssessment) {
     form.name = undefined
-    form.dateTime = undefined
+    form.dateTime = ''
     form.durationMins = undefined
     form.marksObtainable = undefined
     form.passMark = undefined
+    dateTimeValidationMessage.value = undefined
   }
 })
+
+function validateDateTime(dateTime: string) {
+  const now = new Date()
+  const [date, time] = dateTime.split('T')
+  const [year, month, day] = date.split('-')
+  const [hours, minutes] = time.split(':')
+  
+  const result = new Date(Date.UTC(+year, +month - 1, +day, +hours, +minutes)) > now
+  
+  return dateTimeValidationMessage.value = result ? undefined : 'Date and Time must be in the future'
+}
 </script>

@@ -10,7 +10,7 @@ export function useNotification() {
   return notification
 }
 
-export function createNotification(message: string, icon: string, timeoutMs: number, type: 'warning' | 'error' | 'success') {
+export function createNotification(message: string, icon: string, timeoutMs: number, type: 'error' | 'success') {
   
   notification.message = message
   notification.icon = icon

@@ -221,37 +221,40 @@
           </div>
         </div>
 
-        <div class="mt-8 flex items-center justify-center gap-4">
-          <button
-            type="button"
-            class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.start === 0"
-            @click="paginateQuestions('prev')"
-          >
-            <span class="i-hugeicons:arrow-left-02 size-4" />
-          </button>
+        <template v-if="assessment.questions.questions.length > splitter.end">
+          <div class="mt-8 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+              :disabled="splitter.start === 0"
+              @click="paginateQuestions('prev')"
+            >
+              <span class="i-hugeicons:arrow-left-02 size-4" />
+            </button>
 
-          <p class="text-center text-sm text-gray">
-            {{ splitter.start + 1 }} to {{ Math.min(splitter.end, assessment.questions.questions.length) }} of {{ assessment.questions.questions.length }} Questions
-          </p>
+            <p class="text-center text-sm text-gray">
+              {{ splitter.start + 1 }} to {{ Math.min(splitter.end, assessment.questions.questions.length) }} of {{ assessment.questions.questions.length }} Questions
+            </p>
 
-          <button
-            type="button"
-            class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
-            :disabled="splitter.end >= assessment.questions.questions.length"
-            @click="paginateQuestions('next')"
-          >
-            <span class="i-hugeicons:arrow-right-02 size-4" />
-          </button>
-        </div>
+            <button
+              type="button"
+              class="w-max flex items-center rounded-2 bg-brand-green px-3 py-2 text-white duration-500 ease property-background-color hover:bg-brand-green/70 disabled:opacity-50"
+              :disabled="splitter.end >= assessment.questions.questions.length"
+              @click="paginateQuestions('next')"
+            >
+              <span class="i-hugeicons:arrow-right-02 size-4" />
+            </button>
+          </div>
+
+        </template>
 
       </template>
 
       <template v-else>
 
         <div class="mt-12 min-w-full flex flex-col items-center justify-center gap-2 op-50">
-          <span class="i-hugeicons:database size-8" />
-          <p class="text-sm font-semibold">
+          <span class="i-hugeicons:database size-6" />
+          <p class="text-sm font-medium">
             No Question Found
           </p>
         </div>
@@ -267,11 +270,11 @@
 
   <template v-if="!assessment && status === 'success'">
 
-    <div class="m-a flex flex-col items-center gap-4">
+    <div class="m-a flex flex-col items-center gap-2 op-50">
 
-      <span class="i-hugeicons:database size-8 op-40" />
+      <span class="i-hugeicons:database size-6" />
 
-      <p class="text-xl font-semibold op-40">
+      <p class="text-lg font-semibold">
         Assessment not Found
       </p>
 

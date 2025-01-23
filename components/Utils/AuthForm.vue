@@ -11,7 +11,7 @@
   
     <form
       class="shadowed w-full flex flex-col items-center gap-8 rounded-4 bg-white px-4 py-8"
-      @submit.prevent="callMagicLink()"
+      @submit.prevent="execute()"
     >
   
       <div
@@ -77,14 +77,14 @@
   
       <button
         type="submit"
-        :disabled="magicLinkStatus === 'sending' || magicLinkStatus === 'sent'"
+        :disabled="status === 'success' && countdownTime > 0"
         class="w-max flex items-center gap-2 rounded-2 bg-brand-green px-4 py-2 font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
       >
-        {{ magicLinkStatus === 'sent' ? `Resend in ${countdownTime} seconds.` : magicLinkStatus === 'sending' ? 'Sending...' : 'Send Magic Link' }}
+        {{ status === 'success' && countdownTime > 0 ? `Resend in ${countdownTime} seconds.` : status === 'pending' ? 'Sending...' : 'Send Magic Link' }}
   
         <span
           :class="{
-            'animate-spin i-hugeicons:reload size-5': magicLinkStatus === 'sending',
+            'animate-spin i-hugeicons:reload size-5': status === 'pending',
   
           }"
         />
@@ -98,41 +98,36 @@
 <script setup lang="ts">
 const email = ref('')
 const countdownTime = ref(0)
-const magicLinkStatus = ref('idle' as 'idle' | 'sending' | 'sent' | 'error')
-  
-const callMagicLink = () => {
-  magicLinkStatus.value = 'sending'
-  countdownTime.value = 300
-  
-  magicLink(email.value)
-    .then(() => {
-      magicLinkStatus.value = 'sent'
 
-      createNotification(
-        'Magic Link Sent',
-        'i-hugeicons:checkmark-circle-02',
-        5000,
-        'success',
-      )
-  
-      const interval = setInterval(() => {
-        if (countdownTime.value > 0) {
-          countdownTime.value--
-        }
-        else {
-          clearInterval(interval)
-          magicLinkStatus.value = 'idle'
-        }
-      }, 1000)
-    })
-    .catch((error: Error) => {
-      magicLinkStatus.value = 'error'
-      createNotification(
-        error.message,
-        'i-hugeicons:cancel-circle',
-        5000,
-        'error',
-      )
-    })
-}
+const { execute, status } = useAsyncData('magic-link', () => magicLink(email.value), { immediate: false })
+
+watch(status, (newStatus) => {
+  countdownTime.value = 300
+
+  if (newStatus === 'success') {
+    createNotification(
+      'Magic Link Sent',
+      'i-hugeicons:checkmark-circle-02',
+      5000,
+      'success',
+    )
+
+    const interval = setInterval(() => {
+      if (countdownTime.value > 0) {
+        countdownTime.value--
+      }
+      else {
+        clearInterval(interval)
+      }
+    }, 1000)
+  }
+  else if (newStatus === 'error') {
+    createNotification(
+      'Error Sending Magic Link',
+      'i-hugeicons:cancel-circle',
+      5000,
+      'error',
+    )
+  }
+})
 </script>

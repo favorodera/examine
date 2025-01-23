@@ -9,7 +9,7 @@ type Notifications = {
   message: string | undefined
   icon: string | undefined
   timeoutMs: number | undefined
-  type: 'warning' | 'error' | 'success' | undefined
+  type: 'error' | 'success' | undefined
   state: 'open' | 'closed'
 }
 

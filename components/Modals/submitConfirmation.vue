@@ -87,7 +87,7 @@ const bio = ref<{
 
 const selectedOptions = ref<string[]>()
 
-onNuxtReady(() => {
+onMounted(() => {
   const storedBio = localStorage.getItem(`${props.assessmentId}-bio`)
   const storedSelectedOptions = localStorage.getItem(`${props.assessmentId}-selectedOptions`)
 
