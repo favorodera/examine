@@ -40,6 +40,10 @@ watch(notification, () => {
     const notificationTimeout = setTimeout(() => {
       notification.state = 'closed'
 
+      if (notification.action) {
+        notification.action()
+      }
+
       clearTimeout(notificationTimeout)
     }, notification.timeoutMs)
   }

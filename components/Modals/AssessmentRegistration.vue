@@ -75,7 +75,7 @@
               <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
                 <span class="i-hugeicons:departement size-5 shrink-0" />
                 <input
-                  id="id"
+                  id="department"
                   v-model="form.department"
                   type="text"
                   spellcheck="true"
@@ -146,10 +146,17 @@ const form = reactive({
 const registerCandidate = () => {
   status.value = 'pending'
   localStorage.setItem(candidateBioStorageKey, JSON.stringify(form))
-  setTimeout(() => {
-    status.value = 'success'
-    window.location.reload()
-  }, 2000)
+
+  createNotification(
+    'Registration Successful',
+    'i-hugeicons:checkmark-circle-02',
+    4000,
+    'success',
+    () => {
+      status.value = 'success'
+      window.location.reload()
+    },
+  )
 }
     
 watch(useModalsState(), (newState) => {

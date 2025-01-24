@@ -11,6 +11,7 @@ type Notifications = {
   timeoutMs: number | undefined
   type: 'error' | 'success' | undefined
   state: 'open' | 'closed'
+  action?: () => void
 }
 
 export type { ModalsState, Notifications }

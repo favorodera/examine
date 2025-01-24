@@ -44,7 +44,7 @@
 
         <div class="w-max flex flex-col gap-1">
 
-          <p class="w-max text-sm font-medium">
+          <p class="w-max text-sm font-medium capitalize">
 
             Status: {{ assessment.status }}
           </p>
@@ -76,7 +76,7 @@
               Candidate Bio
             </p>
 
-            <div class="flex flex-col gap-2 text-lg font-semibold">
+            <div class="mb-4 flex flex-col gap-2 text-lg font-semibold">
 
               <p class="line-clamp-1">
 
@@ -98,6 +98,13 @@
               </p>
 
             </div>
+
+            <button
+              class="w-max rounded-1 bg-brand-green px-2 py-1 text-xs text-white font-medium tracking-wide duration-500 ease property-background-color hover:bg-brand-green/70"
+              @click="clearRegistration()"
+            >
+              INCORRECT?
+            </button>
 
           </div>
 
@@ -155,7 +162,7 @@
             <div
               v-for="(option, PropertyKey) in assessment.questions.questions[currentQuestionIndex]?.options"
               :key="PropertyKey"
-              class="w-max"
+              class="w-full flex items-start"
             >
 
               <input
@@ -169,13 +176,13 @@
 
               <label
                 :for="`option-${PropertyKey.toString().toLowerCase()}`"
-                class="option flex cursor-pointer items-center gap-2 rounded-md p-2 font-medium transition-colors duration-200 hover:bg-brand-green/20 peer-checked:bg-brand-green peer-checked:text-white"
+                class="flex cursor-pointer items-start gap-2 rounded-md p-2 font-medium transition-colors duration-200 hover:bg-brand-green/20 peer-checked:bg-brand-green peer-checked:text-white"
               >
 
-                <span class="font-semibold">
+                <span class="shrink-0 font-semibold">
                   {{ PropertyKey.toString().toUpperCase() }}.
                 </span>
-                {{ option }}
+                <span>{{ option }}</span>
               </label>
 
             </div>
@@ -325,6 +332,12 @@
 </template>
 
 <script setup lang="ts">
+import type { RealtimeChannel } from '@supabase/realtime-js'
+
+const client = useSupabaseClient()
+const instructor = useSupabaseUser()
+
+const assessmentChannel = ref<RealtimeChannel>()
 
 const { assessmentId } = useRoute().params
 const { accessCode } = useRoute().query
@@ -347,6 +360,24 @@ const { data: assessment, status, refresh } = await useAsyncData(
   'assessment',
   () =>
     $fetch(`/api/assessment?assessmentId=${assessmentId}&accessCode=${accessCode}`, { method: 'get', timeout: 30000 }),
+)
+
+const { execute, status: submissionStatus, error } = await useAsyncData(
+  'force-submit-assessment',
+  () => $fetch('/api/submit-assessment', {
+    body: {
+      assessmentId: assessment.value?.assessment_id,
+      name: candidateBio.value?.name,
+      id: candidateBio.value?.id,
+      department: candidateBio.value?.department,
+      email: candidateBio.value?.email,
+      selectedOptions: selectedOptions.value,
+      instructorId: assessment.value?.instructor_id,
+    },
+    method: 'POST',
+    timeout: 30000,
+  }),
+  { immediate: false },
 )
 
 const startTimer = () => {
@@ -400,6 +431,82 @@ onMounted(() => {
 
   if (assessment.value?.status === 'ongoing') return startTimer()
 
+  assessmentChannel.value = client.channel('assessment-details')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .subscribe()
+
+})
+
+function submitAssessment() {
+
+  if (instructor.value) {
+    createNotification(
+      'Instructors cannot take assessments',
+      'i-hugeicons-cancel-circle',
+      5000,
+      'error',
+    )
+    return
+  }
+  else {
+    execute()
+  }
+
+}
+
+watch(assessment, (newValue) => {
+  const hasSubmitted = localStorage.getItem(`${assessmentId}-submitted`)
+
+  if (newValue?.status === 'ended' && hasSubmitted === null) {
+    createNotification(
+      'Assessment Ended',
+      'i-hugeicons:checkmark-circle-02',
+      5000,
+      'success',
+    )
+    submitAssessment()
+  }
+})
+
+watch(submissionStatus, (newStatus) => {
+  if (newStatus === 'success') {
+
+    createNotification(
+      'Assessment Submitted Successfully',
+      'i-hugeicons:checkmark-circle-02',
+      5000,
+      'success',
+    )
+
+    localStorage.removeItem(`${assessmentId}-bio`)
+    localStorage.removeItem(`${assessmentId}-selectedOptions`)
+    localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
+
+  }
+  else if (newStatus === 'error') {
+
+    if (error.value?.statusMessage === 'Candidate Already Submitted') {
+      createNotification(
+        error.value.statusMessage,
+        'i-hugeicons-cancel-circle',
+        5000,
+        'error',
+      )
+    }
+    else {
+      createNotification(
+        'Error Submitting Assessment',
+        'i-hugeicons-cancel-circle',
+        5000,
+        'error',
+      )
+    }
+
+  }
 })
 
 watch(selectedOptions, (newValue) => {
@@ -409,4 +516,11 @@ watch(selectedOptions, (newValue) => {
 function goToQuestion(index: number) {
   currentQuestionIndex.value = index
 }
+
+function clearRegistration() {
+  localStorage.removeItem(`${assessmentId}-bio`)
+
+  window.location.reload()
+}
+
 </script>

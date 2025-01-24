@@ -119,7 +119,7 @@ import type { RealtimeChannel } from '@supabase/realtime-js'
 const client = useSupabaseClient()
 
 const { assessmentId } = useRoute().params
-const questionsChannel = ref<RealtimeChannel>()
+const assessmentDetailsChannel = ref<RealtimeChannel>()
 
 const { data: assessment, refresh: refresh, status, clear } = await useAsyncData(
   'assessment-details',
@@ -140,7 +140,7 @@ const remainingMarksObtainable = computed(() => {
 
 onMounted(() => {
 
-  questionsChannel.value = client.channel('assessment-details')
+  assessmentDetailsChannel.value = client.channel('assessment-details')
     .on(
       'postgres_changes',
       { event: '*', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
@@ -169,7 +169,7 @@ onUnmounted(() => {
 
   clear()
 
-  client.removeChannel(questionsChannel.value!)
+  client.removeChannel(assessmentDetailsChannel.value!)
 
 })
 
