@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const { data: candidateDetails, error } = await serverClient
       .from('candidates')
       .select(`
-        candidate_id, name, score, time_spent_mins, remark, candidate_email,answers, candidate_department,
+        candidate_id, name, score, time_spent_mins, remark, candidate_email, answers, candidate_department,
         assessments (
           duration_mins, marks_obtainable, assessment_name, status, date_time,
           correct_answers(correct_answers),
@@ -18,10 +18,9 @@ export default defineEventHandler(async (event) => {
           )
         )
       `)
-      .eq('assessments.assessment_id', assessmentId)
-      .eq('candidate_id', candidateId)
+      .match({ assessment_id: assessmentId, candidate_id: candidateId })
       .single()
-
+      
     if (error) {
       return sendError(event, createError({ statusCode: 500, statusMessage: error.message }))
     }

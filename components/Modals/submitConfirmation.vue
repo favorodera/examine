@@ -25,7 +25,7 @@
 
             <span class="i-hugeicons:checkmark-circle-02 size-12 text-brand-green" />
 
-            <p class="text-center text-lg font-bold">
+            <p class="text-center text-lg font-semibold">
               Are you sure you want to submit this assessment?
             </p>
 
@@ -70,38 +70,26 @@ const instructor = useSupabaseUser()
 const props = defineProps<{
   assessmentId: string | undefined
   instructorId: string | undefined
+  selectedOptions: string[]
+  candidateBio: {
+    name: string
+    id: string
+    email: string
+    department: string
+  } | undefined
+  
 }>()
-
-const bio = ref<{
-  name: string
-  id: string
-  email: string
-  department: string
-}>()
-
-const selectedOptions = ref<string[]>()
-
-onMounted(() => {
-  const storedBio = localStorage.getItem(`${props.assessmentId}-bio`)
-  const storedSelectedOptions = localStorage.getItem(`${props.assessmentId}-selectedOptions`)
-
-  if (storedBio && storedSelectedOptions) {
-    bio.value = JSON.parse(storedBio)
-    selectedOptions.value = JSON.parse(storedSelectedOptions)
-  }
-
-})
 
 const { execute, status, error } = await useAsyncData(
   'submit-assessment',
   () => $fetch('/api/submit-assessment', {
     body: {
       assessmentId: props.assessmentId,
-      name: bio.value?.name,
-      id: bio.value?.id,
-      department: bio.value?.department,
-      email: bio.value?.email,
-      selectedOptions: selectedOptions.value,
+      name: props.candidateBio?.name,
+      id: props.candidateBio?.id,
+      department: props.candidateBio?.department,
+      email: props.candidateBio?.email,
+      selectedOptions: props.selectedOptions,
       instructorId: props.instructorId,
     },
     method: 'POST',
@@ -133,24 +121,37 @@ watch(status, (newStatus) => {
     createNotification(
       'Assessment Submitted Successfully',
       'i-hugeicons:checkmark-circle-02',
-      5000,
+      4000,
       'success',
+      () => {
+        localStorage.setItem(`${props.assessmentId}-submitted`, JSON.stringify(true))
+
+        localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
+
+        useModals('submitAssessment', 'close')
+
+        navigateTo(`/${props.assessmentId}/${encodeURIComponent(props.candidateBio?.id as string)}`)
+      },
     )
-
-    localStorage.removeItem(`${props.assessmentId}-bio`)
-    localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
-    localStorage.setItem(`${props.assessmentId}-submitted`, JSON.stringify(true))
-
-    useModals('submitAssessment', 'close')
+    
   }
   else if (newStatus === 'error') {
 
-    if (error.value?.statusMessage === 'Candidate Already Submitted') {
+    if (error.value?.statusMessage === 'Candidate already submitted.') {
       createNotification(
         error.value.statusMessage,
         'i-hugeicons-cancel-circle',
-        5000,
+        4000,
         'error',
+        () => {
+          localStorage.setItem(`${props.assessmentId}-submitted`, JSON.stringify(true))
+
+          localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
+
+          useModals('submitAssessment', 'close')
+
+          navigateTo(`/${props.assessmentId}/${encodeURIComponent(props.candidateBio?.id as string)}`)
+        },
       )
     }
     else {

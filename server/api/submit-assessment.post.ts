@@ -26,25 +26,6 @@ export default defineEventHandler(async (event) => {
   }
     
   try {
-
-    const { error: submissionCheckError, data: submissionCheck } = await serverClient
-      .from('candidates')
-      .select('*')
-      .eq('candidate_id', id)
-      .eq('instructor_id', instructorId)
-      .eq('candidate_department', department)
-      .eq('candidate_email', email)
-      .eq('assessment_id', assessmentId)
-      .eq('name', name)
-      .single()
-    
-    if (submissionCheckError) {
-      return sendError(event, createError({ statusCode: 500, statusMessage: submissionCheckError.message }))
-    }
-
-    if (submissionCheck) {
-      return sendError(event, createError({ statusCode: 500, statusMessage: 'Candidate Already Submitted' }))
-    }
     
     const { error } = await serverClient
       .from('candidates')

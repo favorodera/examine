@@ -15,7 +15,7 @@
         </h1>
 
         <button
-          v-if="assessment.status === 'ongoing'"
+          v-if="assessment.status === 'ongoing' && !hasSubmitted"
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
           @click="useModals('submitAssessment', 'open')"
@@ -100,15 +100,19 @@
             </div>
 
             <button
+              :disabled="hasSubmitted"
               class="w-max rounded-1 bg-brand-green px-2 py-1 text-xs text-white font-medium tracking-wide duration-500 ease property-background-color hover:bg-brand-green/70"
               @click="clearRegistration()"
             >
-              INCORRECT?
+              {{ hasSubmitted ? 'SUBMITTED' : 'INCORRECT?' }}
             </button>
 
           </div>
 
-          <div class="relative aspect-square size-40 flex items-center justify-center rounded-full p-2">
+          <div
+            v-if="!hasSubmitted"
+            class="relative aspect-square size-40 flex items-center justify-center rounded-full p-2"
+          >
             <div class="absolute inset-0 size-40 animate-pulse rounded-full bg-brand-green" />
 
             <div class="z-0 size-full flex flex-col items-center justify-center gap-1 rounded-full bg-white p-4">
@@ -143,7 +147,7 @@
 
       </template>
 
-      <template v-if="assessment && status === 'success' && assessment.status === 'ongoing'">
+      <template v-if="assessment && status === 'success' && assessment.status === 'ongoing' && !hasSubmitted">
 
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
@@ -323,6 +327,8 @@
       <ModalsSubmitConfirmation
         :assessment-id="assessment?.assessment_id"
         :instructor-id="assessment?.instructor_id"
+        :candidate-bio="candidateBio"
+        :selected-options="selectedOptions"
       />
 
     </template>
@@ -333,6 +339,8 @@
 
 <script setup lang="ts">
 import type { RealtimeChannel } from '@supabase/realtime-js'
+
+const hasSubmitted = ref(false)
 
 const client = useSupabaseClient()
 const instructor = useSupabaseUser()
@@ -411,11 +419,20 @@ const startTimer = () => {
 
 const candidateBioStorageKey = `${assessmentId}-bio`
 const selectedOptionsStorageKey = `${assessmentId}-selectedOptions`
+const hasSubmittedKey = `${assessmentId}-submitted`
 
 onMounted(() => {
 
   const storedCandidateBio = localStorage.getItem(candidateBioStorageKey)
   const storedSelectedOptions = localStorage.getItem(selectedOptionsStorageKey)
+  const storedHasSubmitted = localStorage.getItem(hasSubmittedKey)
+
+  if (storedHasSubmitted) {
+    hasSubmitted.value = JSON.parse(storedHasSubmitted)
+  }
+  else {
+    localStorage.setItem(hasSubmittedKey, JSON.stringify(false))
+  }
 
   if (storedSelectedOptions) {
     selectedOptions.value = JSON.parse(storedSelectedOptions)
@@ -431,14 +448,18 @@ onMounted(() => {
 
   if (assessment.value?.status === 'ongoing') return startTimer()
 
-  assessmentChannel.value = client.channel('assessment-details')
+  assessmentChannel.value = client.channel('ongoing-assessment')
     .on(
       'postgres_changes',
-      { event: '*', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
+      { event: 'UPDATE', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
       () => refresh(),
     )
     .subscribe()
 
+})
+
+onUnmounted(() => {
+  client.removeChannel(assessmentChannel.value!)
 })
 
 function submitAssessment() {
@@ -459,9 +480,8 @@ function submitAssessment() {
 }
 
 watch(assessment, (newValue) => {
-  const hasSubmitted = localStorage.getItem(`${assessmentId}-submitted`)
 
-  if (newValue?.status === 'ended' && hasSubmitted === null) {
+  if (newValue?.status === 'ended' && !hasSubmitted.value) {
     createNotification(
       'Assessment Ended',
       'i-hugeicons:checkmark-circle-02',
@@ -472,29 +492,50 @@ watch(assessment, (newValue) => {
   }
 })
 
+watch(hasSubmitted, (newStatus) => {
+
+  if (newStatus) {
+    localStorage.setItem(hasSubmittedKey, JSON.stringify(newStatus))
+  }
+}, { immediate: true })
+
 watch(submissionStatus, (newStatus) => {
   if (newStatus === 'success') {
 
     createNotification(
       'Assessment Submitted Successfully',
       'i-hugeicons:checkmark-circle-02',
-      5000,
+      4000,
       'success',
-    )
+      () => {
+        localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
 
-    localStorage.removeItem(`${assessmentId}-bio`)
-    localStorage.removeItem(`${assessmentId}-selectedOptions`)
-    localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
+        localStorage.removeItem(`${assessmentId}-selectedOptions`)
+
+        useModals('submitAssessment', 'close')
+
+        navigateTo(`/${assessmentId}/${encodeURIComponent(candidateBio.value?.id as string)}`)
+      },
+    )
 
   }
   else if (newStatus === 'error') {
 
-    if (error.value?.statusMessage === 'Candidate Already Submitted') {
+    if (error.value?.statusMessage === 'Candidate already submitted.') {
       createNotification(
         error.value.statusMessage,
         'i-hugeicons-cancel-circle',
-        5000,
+        4000,
         'error',
+        () => {
+          localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
+
+          localStorage.removeItem(`${assessmentId}-selectedOptions`)
+
+          useModals('submitAssessment', 'close')
+
+          navigateTo(`/${assessmentId}/${encodeURIComponent(candidateBio.value?.id as string)}`)
+        },
       )
     }
     else {
