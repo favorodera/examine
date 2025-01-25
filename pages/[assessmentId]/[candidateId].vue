@@ -14,6 +14,7 @@
         </h1>
 
         <button
+          v-if="candidateDetails.assessments.status === 'ended'"
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
           @click="print()"
@@ -66,11 +67,11 @@
           #error
         >
 
-          <div class="m-a flex flex-col items-center gap-4 text-red">
+          <div class="m-a flex flex-col items-center gap-2 text-red">
 
-            <span class="i-hugeicons:alert-02 size-8" />
+            <span class="i-hugeicons:alert-02 size-6" />
 
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Error Fetching Candidate
             </p>
 
@@ -91,11 +92,11 @@
           #loading
         >
 
-          <div class="m-a flex flex-col items-center gap-4 text-orange">
+          <div class="m-a flex flex-col items-center gap-2 text-orange">
 
-            <span class="i-hugeicons:reload size-8 animate-spin" />
+            <span class="i-hugeicons:reload size-6 animate-spin" />
 
-            <p class="text-xl font-semibold">
+            <p class="text-lg font-medium">
               Fetching Candidate...
             </p>
 
@@ -112,7 +113,11 @@
 </template>
 
 <script setup lang="ts">
+import type { RealtimeChannel } from '@supabase/realtime-js'
+
 const { assessmentId, candidateId } = useRoute().params
+const client = useSupabaseClient()
+const assessmentChannel = ref<RealtimeChannel>()
 
 const { data: candidateDetails, status, refresh } = await useAsyncData(
   'candidate',
@@ -121,4 +126,20 @@ const { data: candidateDetails, status, refresh } = await useAsyncData(
 )
 
 const print = () => window.print()
+
+onMounted(() => {
+  
+  assessmentChannel.value = client.channel('ongoing-assessment')
+    .on(
+      'postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .subscribe()
+
+})
+
+onUnmounted(() => {
+  client.removeChannel(assessmentChannel.value!)
+})
 </script>

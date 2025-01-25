@@ -241,11 +241,11 @@
 
       <template v-else-if="status === 'pending'">
 
-        <div class="m-a flex flex-col items-center gap-4 text-orange">
+        <div class="m-a flex flex-col items-center gap-2 text-orange">
 
-          <span class="i-hugeicons:reload size-8 animate-spin" />
+          <span class="i-hugeicons:reload size-6 animate-spin" />
 
-          <p class="text-xl font-semibold">
+          <p class="text-lg font-medium">
 
             Fetching Assessment...
           </p>
@@ -256,11 +256,11 @@
 
       <template v-if="status === 'error'">
 
-        <div class="m-a flex flex-col items-center gap-4 text-red">
+        <div class="m-a flex flex-col items-center gap-2 text-red">
 
-          <span class="i-hugeicons:alert-02 size-8" />
+          <span class="i-hugeicons:alert-02 size-6" />
 
-          <p class="text-xl font-semibold">
+          <p class="text-lg font-medium">
 
             Error Fetching Assessment
           </p>
@@ -282,9 +282,9 @@
 
         <div class="m-a flex flex-col items-center gap-4">
 
-          <span class="i-hugeicons:database size-8 op-40" />
+          <span class="i-hugeicons:database size-6 op-40" />
 
-          <p class="text-xl font-semibold op-40">
+          <p class="text-lg font-medium op-40">
 
             Assessment not Found
           </p>
@@ -295,16 +295,48 @@
 
       <template v-if="assessment?.status === 'ended'">
 
-        <div class="m-a flex flex-col items-center gap-4 text-brand-green">
+        <div class="m-a flex flex-col items-center gap-2 text-brand-green">
 
-          <span class="i-hugeicons:hourglass-off size-8" />
+          <span class="i-hugeicons:hourglass-off size-6" />
 
-          <p class="text-xl font-semibold">
+          <p class="text-lg font-medium">
 
             Assessment Ended
           </p>
 
+          <input
+            id="assessment-id"
+            v-model="candidateId"
+            type="text"
+            name="assessment-id"
+            placeholder="Enter Candidate ID"
+            class="min-w-30 b border-brand-gray rounded-md p-2 text-base text-brand-dark font-medium outline-none"
+          >
+
+          <button
+            type="button"
+            :disabled="!candidateId"
+            class="rounded-md bg-brand-green px-3 py-1 text-base text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+            @click="navigateTo(`${assessment.assessment_id}/${encodeURIComponent(candidateId!)}`)"
+          >
+
+            Get Results
+          </button>
+
         </div>
+
+      </template>
+
+      <template v-if="hasSubmitted && assessment?.status === 'ongoing'">
+
+        <button
+          type="button"
+          class="mt-12 rounded-md bg-brand-green px-3 py-1 text-base text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+          @click="navigateTo(`${assessment?.assessment_id}/${encodeURIComponent(candidateBio?.id!)}`)"
+        >
+
+          Get Results
+        </button>
 
       </template>
 
@@ -339,6 +371,8 @@
 
 <script setup lang="ts">
 import type { RealtimeChannel } from '@supabase/realtime-js'
+
+const candidateId = ref<string>()
 
 const hasSubmitted = ref(false)
 

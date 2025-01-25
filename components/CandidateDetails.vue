@@ -195,18 +195,34 @@
     </section>
 
   </template>
+
+  <template v-else-if="!candidateDetails?.assessments.correct_answers && status === 'success'">
+
+    <div class="m-a flex flex-col items-center gap-2 op-50">
+
+      <span class="i-hugeicons:clock-01 size-6" />
+
+      <p class="text-center text-lg font-medium">
+        Assessment is ongoing.
+        <br>
+        Check back soon for results.
+      </p>
+
+    </div>
+
+  </template>
   
   <slot name="error" />
 
   <slot name="loading" />
 
-  <template v-if="!candidateDetails && status==='success'">
+  <template v-if="!candidateDetails?.candidate_id && status==='success'">
 
-    <div class="m-a flex flex-col items-center gap-4">
+    <div class="m-a flex flex-col items-center gap-2 op-50">
 
-      <span class="i-hugeicons:database size-8 op-40" />
+      <span class="i-hugeicons:database size-6" />
 
-      <p class="text-xl font-semibold op-40">
+      <p class="text-lg font-medium">
         Candidate not Found
       </p>
 
