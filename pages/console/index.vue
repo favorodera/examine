@@ -15,7 +15,7 @@
 
       <button
         type="button"
-        class="size-8 overflow-hidden b b-brand-green rounded-full rounded-md transition-transform duration-500 hover:scale-110"
+        class="size-8 overflow-hidden b b-brand-green rounded-full transition-transform duration-500 hover:scale-110"
       >
 
         <img

@@ -72,10 +72,9 @@ const props = defineProps<{
   instructorId: string | undefined
   selectedOptions: string[]
   candidateBio: {
-    name: string
-    id: string
-    email: string
-    department: string
+    id: string | undefined
+    email: string | undefined
+    passCode: string | undefined
   } | undefined
   
 }>()
@@ -85,14 +84,12 @@ const { execute, status, error } = await useAsyncData(
   () => $fetch('/api/submit-assessment', {
     body: {
       assessmentId: props.assessmentId,
-      name: props.candidateBio?.name,
       id: props.candidateBio?.id,
-      department: props.candidateBio?.department,
       email: props.candidateBio?.email,
       selectedOptions: props.selectedOptions,
-      instructorId: props.instructorId,
+      passCode: props.candidateBio?.passCode,
     },
-    method: 'POST',
+    method: 'PUT',
     timeout: 30000,
   }),
   { immediate: false },
@@ -124,11 +121,8 @@ watch(status, (newStatus) => {
       4000,
       'success',
       () => {
-        localStorage.setItem(`${props.assessmentId}-submitted`, JSON.stringify(true))
-
-        localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
-
         useModals('submitAssessment', 'close')
+        localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
 
         navigateTo(`/${props.assessmentId}/${encodeURIComponent(props.candidateBio?.id as string)}`)
       },
@@ -144,11 +138,9 @@ watch(status, (newStatus) => {
         4000,
         'error',
         () => {
-          localStorage.setItem(`${props.assessmentId}-submitted`, JSON.stringify(true))
+          useModals('submitAssessment', 'close')
 
           localStorage.removeItem(`${props.assessmentId}-selectedOptions`)
-
-          useModals('submitAssessment', 'close')
 
           navigateTo(`/${props.assessmentId}/${encodeURIComponent(props.candidateBio?.id as string)}`)
         },

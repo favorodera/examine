@@ -15,7 +15,7 @@
         </h1>
 
         <button
-          v-if="assessment.status === 'ongoing' && !hasSubmitted"
+          v-if="assessment.status === 'ongoing' && data?.submitted === false"
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
           @click="useModals('submitAssessment', 'open')"
@@ -63,7 +63,74 @@
 
     <template #body>
 
-      <template v-if="candidateBio && assessment && assessment.status === 'ongoing'">
+      <template v-if="!data && status === 'success' && assessment?.status === 'ongoing'">
+
+        <form
+          class="shadowed m-a max-w-md w-full flex flex-col gap-6 b-2 b-white rounded-4 px-4 py-8"
+          @submit.prevent="logInCandidate()"
+        >
+          <h1 class="text-center text-xl font-semibold">
+            Assessment Login
+          </h1>
+            
+          <label
+            for="id"
+          >
+            ID
+            <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
+              <span class="i-hugeicons:id size-5 shrink-0" />
+              <input
+                id="id"
+                v-model="assessmentLoginForm.id"
+                type="text"
+                spellcheck="true"
+                name="id"
+                placeholder="StudentID. If None, EMAIL"
+                class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none placeholder-brand-dark/50"
+                required
+              >
+            </div>
+          </label>
+  
+          <label
+            for="passcode"
+          >
+            Passcode
+            <div class="w-full flex items-center rounded-1.5 bg-brand-gray/20 pl-4">
+              <span class="i-hugeicons:access size-5 shrink-0" />
+              <input
+                id="passcode"
+                v-model="assessmentLoginForm.passCode"
+                type="text"
+                spellcheck="true"
+                name="passcode"
+                placeholder="Passcode"
+                class="w-full flex-1 truncate bg-transparent px-4 py-3 outline-none placeholder-brand-dark/50"
+                required
+              >
+            </div>
+          </label>
+             
+          <button
+            type="submit"
+            :disabled="loginStatus === 'pending'"
+            class="w-max flex items-center self-center gap-2 rounded-2 bg-brand-green px-4 py-2 text-white font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
+          >
+            <div class="flex items-center gap-2">
+              {{ loginStatus === 'pending' ? 'Logging In ...' : 'Submit' }}
+            
+              <span
+                :class="{
+                  'animate-spin i-hugeicons:reload size-5': loginStatus=== 'pending',
+                }"
+              />
+            </div>
+          </button>
+        </form>
+
+      </template>
+
+      <template v-if="data && assessment && assessment.status === 'ongoing'">
 
         <div
           class="shadowed w-full flex flex-col-reverse items-center justify-between gap-4 rounded-3.5 bg-white p-8 sm:flex-row"
@@ -80,37 +147,36 @@
 
               <p class="line-clamp-1">
 
-                Name: {{ candidateBio.name }}
+                Name: {{ data.name }}
               </p>
 
               <p class="line-clamp-1">
 
-                ID: {{ candidateBio.id }}
+                ID: {{ data.candidate_id }}
               </p>
 
               <p class="line-clamp-1">
 
-                Department: {{ candidateBio.department }}
+                Department: {{ data.candidate_department }}
               </p>
 
               <p>
-                Email: {{ candidateBio.email }}
+                Email: {{ data.candidate_email }}
               </p>
 
             </div>
 
-            <button
-              :disabled="hasSubmitted"
-              class="w-max rounded-1 bg-brand-green px-2 py-1 text-xs text-white font-medium tracking-wide duration-500 ease property-background-color hover:bg-brand-green/70"
-              @click="clearRegistration()"
+            <p
+              v-if="data.submitted === true"
+              class="w-max rounded-1 bg-brand-green px-2 py-1 text-xs text-white font-medium tracking-wide"
             >
-              {{ hasSubmitted ? 'SUBMITTED' : 'INCORRECT?' }}
-            </button>
+              SUBMITTED
+            </p>
 
           </div>
 
           <div
-            v-if="!hasSubmitted"
+            v-if="data.submitted === false"
             class="relative aspect-square size-40 flex items-center justify-center rounded-full p-2"
           >
             <div class="absolute inset-0 size-40 animate-pulse rounded-full bg-brand-green" />
@@ -147,7 +213,7 @@
 
       </template>
 
-      <template v-if="assessment && status === 'success' && assessment.status === 'ongoing' && !hasSubmitted">
+      <template v-if="assessment && status === 'success' && assessment.status === 'ongoing' && data && data?.submitted === false">
 
         <div class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
 
@@ -327,12 +393,12 @@
 
       </template>
 
-      <template v-if="hasSubmitted && assessment?.status === 'ongoing'">
+      <template v-if="data?.submitted === true && assessment?.status === 'ongoing'">
 
         <button
           type="button"
           class="mt-12 rounded-md bg-brand-green px-3 py-1 text-base text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
-          @click="navigateTo(`${assessment?.assessment_id}/${encodeURIComponent(candidateBio?.id!)}`)"
+          @click="navigateTo(`${assessment?.assessment_id}/${encodeURIComponent(data.candidate_id!)}`)"
         >
 
           Get Results
@@ -340,26 +406,24 @@
 
       </template>
 
-      <template v-if="assessment?.status === 'upcoming'">
+      <template v-if="assessment?.status === 'upcoming' && status === 'success'">
 
-        <div class="m-a flex flex-col items-center gap-4 text-orange">
-
-          <span class="i-hugeicons:hourglass size-8" />
-
-          <p class="text-xl font-semibold">
-
-            Assessment Not Started
-          </p>
-
-        </div>
+        <CandidateRegistrationForm
+          :assessment-id="assessment.assessment_id"
+          :instructor-id="assessment.instructor_id"
+        />
 
       </template>
 
-      <ModalsAssessmentRegistration />
       <ModalsSubmitConfirmation
         :assessment-id="assessment?.assessment_id"
         :instructor-id="assessment?.instructor_id"
-        :candidate-bio="candidateBio"
+        :candidate-bio="{
+          id: data?.candidate_id,
+          email: data?.candidate_email,
+          passCode: data?.pass_code,
+  
+        }"
         :selected-options="selectedOptions"
       />
 
@@ -373,30 +437,32 @@
 import type { RealtimeChannel } from '@supabase/realtime-js'
 
 const candidateId = ref<string>()
-
-const hasSubmitted = ref(false)
-
 const client = useSupabaseClient()
 const instructor = useSupabaseUser()
-
 const assessmentChannel = ref<RealtimeChannel>()
-
 const { assessmentId } = useRoute().params
 const { accessCode } = useRoute().query
 const currentQuestionIndex = ref(0)
 const selectedOptions = ref<string[]>([])
 const timerInterval = ref<NodeJS.Timeout>()
+const selectedOptionsStorageKey = `${assessmentId}-selectedOptions`
 const timer = reactive({
   hour: 0,
   minute: 0,
 })
+const assessmentLoginForm = reactive({
+  id: undefined,
+  passCode: undefined,
+})
 
-const candidateBio = ref<{
-  name: string
-  id: string
-  email: string
-  department: string
-}>()
+const { execute: logInCandidate, status: loginStatus, data } = await useAsyncData(
+  'login-candidate',
+  () => $fetch(`/api/assessment-login?id=${assessmentLoginForm.id}&passCode=${assessmentLoginForm.passCode}&assessmentId=${assessmentId}`, {
+    method: 'GET',
+    timeout: 30000,
+  }),
+  { immediate: false },
+)
 
 const { data: assessment, status, refresh } = await useAsyncData(
   'assessment',
@@ -409,14 +475,12 @@ const { execute, status: submissionStatus, error } = await useAsyncData(
   () => $fetch('/api/submit-assessment', {
     body: {
       assessmentId: assessment.value?.assessment_id,
-      name: candidateBio.value?.name,
-      id: candidateBio.value?.id,
-      department: candidateBio.value?.department,
-      email: candidateBio.value?.email,
+      id: data.value?.candidate_id,
+      email: data.value?.candidate_email,
+      passCode: data.value?.pass_code,
       selectedOptions: selectedOptions.value,
-      instructorId: assessment.value?.instructor_id,
     },
-    method: 'POST',
+    method: 'PUT',
     timeout: 30000,
   }),
   { immediate: false },
@@ -451,50 +515,9 @@ const startTimer = () => {
   }, 60000)
 }
 
-const candidateBioStorageKey = `${assessmentId}-bio`
-const selectedOptionsStorageKey = `${assessmentId}-selectedOptions`
-const hasSubmittedKey = `${assessmentId}-submitted`
-
-onMounted(() => {
-
-  const storedCandidateBio = localStorage.getItem(candidateBioStorageKey)
-  const storedSelectedOptions = localStorage.getItem(selectedOptionsStorageKey)
-  const storedHasSubmitted = localStorage.getItem(hasSubmittedKey)
-
-  if (storedHasSubmitted) {
-    hasSubmitted.value = JSON.parse(storedHasSubmitted)
-  }
-  else {
-    localStorage.setItem(hasSubmittedKey, JSON.stringify(false))
-  }
-
-  if (storedSelectedOptions) {
-    selectedOptions.value = JSON.parse(storedSelectedOptions)
-  }
-
-  if (storedCandidateBio) {
-    candidateBio.value = JSON.parse(storedCandidateBio)
-  }
-
-  if ((assessment.value?.status === 'ongoing') && (!candidateBio.value?.email || !candidateBio.value?.id || !candidateBio.value?.name || !candidateBio.value?.department)) {
-    useModals('assessmentRegistration', 'open')
-  }
-
-  if (assessment.value?.status === 'ongoing') return startTimer()
-
-  assessmentChannel.value = client.channel('ongoing-assessment')
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
-      () => refresh(),
-    )
-    .subscribe()
-
-})
-
-onUnmounted(() => {
-  client.removeChannel(assessmentChannel.value!)
-})
+function goToQuestion(index: number) {
+  currentQuestionIndex.value = index
+}
 
 function submitAssessment() {
 
@@ -513,9 +536,33 @@ function submitAssessment() {
 
 }
 
+onMounted(() => {
+
+  const storedSelectedOptions = localStorage.getItem(selectedOptionsStorageKey)
+
+  if (storedSelectedOptions) {
+    selectedOptions.value = JSON.parse(storedSelectedOptions)
+  }
+
+  if (assessment.value?.status === 'ongoing') return startTimer()
+
+  assessmentChannel.value = client.channel('ongoing-assessment')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
+      () => refresh(),
+    )
+    .subscribe()
+
+})
+
+onUnmounted(() => {
+  client.removeChannel(assessmentChannel.value!)
+})
+
 watch(assessment, (newValue) => {
 
-  if (newValue?.status === 'ended' && !hasSubmitted.value) {
+  if (newValue?.status === 'ended' && !data.value?.submitted) {
     createNotification(
       'Assessment Ended',
       'i-hugeicons:checkmark-circle-02',
@@ -526,12 +573,24 @@ watch(assessment, (newValue) => {
   }
 })
 
-watch(hasSubmitted, (newStatus) => {
-
-  if (newStatus) {
-    localStorage.setItem(hasSubmittedKey, JSON.stringify(newStatus))
+watch(loginStatus, (newValue) => {
+  if (newValue === 'success') {
+    createNotification(
+      'Log In Successful',
+      'i-hugeicons:checkmark-circle-02',
+      5000,
+      'success',
+    )
   }
-}, { immediate: true })
+  else if (newValue === 'error') {
+    createNotification(
+      'Error Logging In',
+      'i-hugeicons:cancel-circle',
+      5000,
+      'error',
+    )
+  }
+})
 
 watch(submissionStatus, (newStatus) => {
   if (newStatus === 'success') {
@@ -542,13 +601,10 @@ watch(submissionStatus, (newStatus) => {
       4000,
       'success',
       () => {
-        localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
-
+        useModals('submitAssessment', 'close')
         localStorage.removeItem(`${assessmentId}-selectedOptions`)
 
-        useModals('submitAssessment', 'close')
-
-        navigateTo(`/${assessmentId}/${encodeURIComponent(candidateBio.value?.id as string)}`)
+        navigateTo(`/${assessmentId}/${encodeURIComponent(data.value?.candidate_id as string)}`)
       },
     )
 
@@ -562,13 +618,10 @@ watch(submissionStatus, (newStatus) => {
         4000,
         'error',
         () => {
-          localStorage.setItem(`${assessmentId}-submitted`, JSON.stringify(true))
-
+          useModals('submitAssessment', 'close')
           localStorage.removeItem(`${assessmentId}-selectedOptions`)
 
-          useModals('submitAssessment', 'close')
-
-          navigateTo(`/${assessmentId}/${encodeURIComponent(candidateBio.value?.id as string)}`)
+          navigateTo(`/${assessmentId}/${encodeURIComponent(data.value?.candidate_id as string)}`)
         },
       )
     }
@@ -587,15 +640,5 @@ watch(submissionStatus, (newStatus) => {
 watch(selectedOptions, (newValue) => {
   localStorage.setItem(selectedOptionsStorageKey, JSON.stringify(newValue))
 }, { deep: true })
-
-function goToQuestion(index: number) {
-  currentQuestionIndex.value = index
-}
-
-function clearRegistration() {
-  localStorage.removeItem(`${assessmentId}-bio`)
-
-  window.location.reload()
-}
 
 </script>

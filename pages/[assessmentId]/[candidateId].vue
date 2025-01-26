@@ -129,7 +129,7 @@ const print = () => window.print()
 
 onMounted(() => {
   
-  assessmentChannel.value = client.channel('ongoing-assessment')
+  assessmentChannel.value = client.channel('assessment-status')
     .on(
       'postgres_changes',
       { event: 'UPDATE', schema: 'public', table: 'assessments', filter: `assessment_id=eq.${assessmentId}` },
