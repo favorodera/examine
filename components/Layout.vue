@@ -20,7 +20,7 @@
       class="shadowed sticky top-0 z-1 w-full flex justify-center bg-white p-4"
     >
 
-      <div class="max-w-360 w-full flex items-center justify-between">
+      <div class="relative max-w-360 w-full flex items-center justify-between">
 
         <slot name="homeNav" />
 

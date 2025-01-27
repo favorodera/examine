@@ -4,7 +4,7 @@ export default async function (email: string) {
     email,
     options: {
       shouldCreateUser: true,
-      emailRedirectTo: 'http://localhost:3000/confirm',
+      emailRedirectTo: 'https://examine-app.vercel.app/confirm',
     },
   })
 }

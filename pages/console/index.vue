@@ -15,7 +15,8 @@
 
       <button
         type="button"
-        class="size-8 overflow-hidden b b-brand-green rounded-full transition-transform duration-500 hover:scale-110"
+        class="relative size-8 overflow-hidden b b-brand-green rounded-full transition-transform duration-500 hover:scale-110"
+        @click="() => isDropdownActive = !isDropdownActive"
       >
 
         <img
@@ -25,6 +26,59 @@
         >
             
       </button>
+
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="transform opacity-0 scale-95"
+        enter-to-class="transform opacity-100 scale-100"
+        leave-active-class="transition duration-300 ease-in"
+        leave-from-class="transform opacity-100 scale-100"
+        leave-to-class="transform opacity-0 scale-95"
+      >
+
+        <div
+          v-if="isDropdownActive"
+          class="shadowed absolute right-0 top-14 flex flex-col items-center justify-between gap-12 b-brand-gray rounded-lg bg-white p-4"
+        >
+
+          <div class="flex items-start gap-2">
+            <div
+              class="size-12 overflow-hidden rounded-full"
+            >
+
+              <img
+                :src="instructor?.user_metadata.picture"
+                :alt="instructor?.email"
+                class="size-full object-cover"
+              >
+            
+            </div>
+            <div class="flex flex-col">
+
+              <p
+                class="line-clamp-1 truncate text-xl font-medium"
+              >
+                {{ instructor?.user_metadata.name }}
+              </p>
+
+              <p class="line-clamp-1 truncate text-base font-medium op-50">
+                {{ instructor?.email }}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="w-max rounded-2 bg-red-600 px-3 py-1 text-white font-medium duration-500 ease property-background-color hover:bg-red-500"
+            @click="() => {
+              isDropdownActive = !isDropdownActive
+              return signOut()
+            }"
+          >
+            Sign Out
+          </button>
+        </div>
+      </Transition>
 
     </template>
 
@@ -92,6 +146,7 @@ import type { RealtimeChannel } from '@supabase/realtime-js'
 const instructor = useSupabaseUser()
 const client = useSupabaseClient()
 const assessmentChannel = ref<RealtimeChannel>()
+const isDropdownActive = ref(false)
 
 const { data: assessments, status, refresh, clear } = useAsyncData(
   'all-assessments',
