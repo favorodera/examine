@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 watch(useModalsState(), (newState) => {
-  if (newState.newQuestion || newState.newAssessment || newState.assessmentRegistration) {
+  if (newState.newQuestion || newState.newAssessment) {
     document.body.style.overflow = 'hidden'
   }
   else {

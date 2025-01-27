@@ -138,7 +138,7 @@ const selectFilter = ref([
   'All',
   'Upcoming',
   'Ongoing',
-  'Completed',
+  'Ended',
 ])
 
 const selectedFilter = ref('All')
@@ -150,18 +150,13 @@ const splitter = reactive({
 
 const filteredAssessments = computed(() => {
   const query = searchQuery.value.toLowerCase()
+  const filter = selectedFilter.value.toLowerCase()
 
-  if (query) {
-    return props.assessments.filter(
-      assessment => assessment.assessment_name.toLowerCase().includes(query),
-    )
-  }
-
-  if (selectedFilter.value === 'All') {
-    return props.assessments
-  }
-
-  return props.assessments.filter(assessment => assessment?.status === selectedFilter.value.toLowerCase())
+  return props.assessments.filter((assessment) => {
+    const matchesQuery = !query || assessment.assessment_name.toLowerCase().includes(query)
+    const matchesFilter = filter === 'all' || assessment.status === filter
+    return matchesQuery && matchesFilter
+  })
 })
 
 function paginate(direction: 'next' | 'prev') {
