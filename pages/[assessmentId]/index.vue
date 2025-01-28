@@ -485,6 +485,16 @@ const { execute, status: submissionStatus, error } = await useAsyncData(
   }),
   { immediate: false },
 )
+useSeoMeta({
+  title: () => `${assessment.value?.assessment_name}`,
+  description: () => `Participate in the ${assessment.value?.assessment_name} assessment to evaluate your knowledge`,
+  ogTitle: () => `Examine | ${assessment.value?.assessment_name}`,
+  ogDescription: () => `Participate in the ${assessment.value?.assessment_name} assessment to evaluate your knowledge`,
+  ogUrl: () => `https://examine-app.vercel.app/${assessment.value?.assessment_id}`,
+  ogSiteName: 'Examine',
+  twitterTitle: () => `Examine | ${assessment.value?.assessment_name}`,
+  twitterDescription: () => `Participate in the ${assessment.value?.assessment_name} assessment to evaluate your knowledge`,
+})
 
 const startTimer = () => {
   const remainingTimeMins = calcRemTime(

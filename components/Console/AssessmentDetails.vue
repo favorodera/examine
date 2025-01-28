@@ -221,7 +221,7 @@
           </div>
         </div>
 
-        <template v-if="assessment.questions.questions.length > splitter.end">
+        <template v-if="assessment.questions.questions.length > 0">
           <div class="mt-8 flex items-center justify-center gap-4">
             <button
               type="button"

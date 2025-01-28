@@ -14,17 +14,30 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  titleTemplate: title => `Examine | ${title}`,
+  titleTemplate: title => `Examine | ${title ?? ''}`,
   ogType: 'website',
-  ogImage: '/images/hero.png',
-  twitterDescription: 'Simplify your assessments management experience with examine',
-  twitterImage: '/images/hero.png',
+  ogImage: {
+    url: '/images/hero-image.png',
+    type: 'image/png',
+    height: '630',
+    width: '1200',
+    alt: 'image',
+  },
+  twitterImage: {
+    url: '/images/hero-image.png',
+    type: 'image/png',
+    height: '630',
+    width: '1200',
+    alt: 'image',
+  },
   twitterCard: 'summary_large_image',
   twitterSite: '@favorodera',
   twitterCreator: '@favorodera',
   robots: 'index, follow',
   author: 'Favour Emeka',
   keywords: 'exam,assessment,exam management,assessment management, examine, cbt',
+  themeColor: '#ffffff',
+  applicationName: 'Examine',
 })
 
 useHead({
@@ -69,10 +82,6 @@ useHead({
         },
       }),
     },
-  ],
-  meta: [
-    { name: 'theme-color', content: '#ffffff' },
-    { name: 'application-name', content: 'Examine' },
   ],
 })
 

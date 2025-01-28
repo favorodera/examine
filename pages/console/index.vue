@@ -158,6 +158,17 @@
 <script setup lang="ts">
 import type { RealtimeChannel } from '@supabase/realtime-js'
 
+useSeoMeta({
+  title: 'Console',
+  description: 'Simplify your assessments management experience with examine',
+  ogTitle: 'Examine | Console',
+  ogDescription: 'Simplify your assessments management experience with examine',
+  ogUrl: 'https://examine-app.vercel.app/console',
+  ogSiteName: 'Examine',
+  twitterTitle: 'Examine | Console',
+  twitterDescription: 'Simplify your assessments management experience with examine',
+})
+
 const instructor = useSupabaseUser()
 const client = useSupabaseClient()
 const assessmentChannel = ref<RealtimeChannel>()

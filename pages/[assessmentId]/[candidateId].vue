@@ -13,14 +13,14 @@
           Candidate Overview
         </h1>
 
-        <button
+        <!-- <button
           v-if="candidateDetails.assessments.status === 'ended'"
           type="button"
           class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
           @click="print()"
         >
           Print
-        </button>
+        </button> -->
 
       </div>
 
@@ -125,7 +125,18 @@ const { data: candidateDetails, status, refresh } = await useAsyncData(
   { server: false },
 )
 
-const print = () => window.print()
+useSeoMeta({
+  title: () => `Results | ${candidateDetails.value?.name}`,
+  description: () => `${candidateDetails.value?.name}'s results for ${candidateDetails.value?.assessments.assessment_name} `,
+  ogTitle: () => `Examine | Results | ${candidateDetails.value?.name}`,
+  ogDescription: () => `${candidateDetails.value?.name}'s results for ${candidateDetails.value?.assessments.assessment_name} `,
+  ogUrl: () => `https://examine-app.vercel.app/${candidateDetails.value?.assessments.assessment_id}/${encodeURIComponent(candidateDetails.value?.candidate_id as string)}`,
+  ogSiteName: 'Examine',
+  twitterTitle: () => `Examine | Results | ${candidateDetails.value?.name}`,
+  twitterDescription: () => `${candidateDetails.value?.name}'s results for ${candidateDetails.value?.assessments.assessment_name} `,
+})
+
+// const print = () => window.print()
 
 onMounted(() => {
   

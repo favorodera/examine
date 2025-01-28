@@ -35,7 +35,7 @@ useSeoMeta({
   ogUrl: 'https://examine-app.vercel.app/',
   ogSiteName: 'Examine',
   twitterTitle: 'Examine | Home',
-
+  twitterDescription: 'Simplify your assessments management experience with examine',
 })
 
 useHead({

@@ -54,6 +54,7 @@ type CandidateDetails = {
   assessments: {
     status: string
     date_time: string
+    assessment_id: string
     duration_mins: number
     assessment_name: string
     marks_obtainable: number

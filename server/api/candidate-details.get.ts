@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       .select(`
         candidate_id, name, score, time_spent_mins, remark, candidate_email, answers, candidate_department,
         assessments (
-          duration_mins, marks_obtainable, assessment_name, status, date_time,
+          duration_mins, assessment_id, marks_obtainable, assessment_name, status, date_time,
           correct_answers(correct_answers),
           questions (
             questions

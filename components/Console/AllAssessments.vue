@@ -72,7 +72,7 @@
 
         </NuxtLink>
 
-        <template v-if="filteredAssessments.length > splitter.end">
+        <template v-if="filteredAssessments.length > 0">
 
           <div class="col-span-full mt-8 flex items-center justify-center gap-4">
             <button

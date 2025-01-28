@@ -127,6 +127,10 @@ const { data: assessment, refresh: refresh, status, clear } = await useAsyncData
   { server: false },
 )
 
+useSeoMeta({
+  title: () => `${assessment.value?.assessment_name}`,
+})
+
 const remainingMarksObtainable = computed(() => {
   const marksObtainable = assessment.value?.marks_obtainable
   const marksAssignedToQuestions = ref<number>()
