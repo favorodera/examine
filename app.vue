@@ -17,14 +17,14 @@ useSeoMeta({
   titleTemplate: title => `Examine | ${title ?? ''}`,
   ogType: 'website',
   ogImage: {
-    url: '/images/hero-image.png',
+    url: 'https://examine-app.vercel.app/images/hero-image.png',
     type: 'image/png',
     height: '630',
     width: '1200',
     alt: 'image',
   },
   twitterImage: {
-    url: '/images/hero-image.png',
+    url: 'https://examine-app.vercel.app/images/hero-image.png',
     type: 'image/png',
     height: '630',
     width: '1200',
@@ -72,7 +72,7 @@ useHead({
         '@type': 'Website',
         'name': 'Examine',
         'url': 'https://examine-app.vercel.app/',
-        'logo': '/images/logo.png',
+        'logo': 'https://examine-app.vercel.app/images/logo.png',
         'contactPoint': {
           '@type': 'ContactPoint',
           'telephone': '+234 802 438 3756',
