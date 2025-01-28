@@ -15,16 +15,23 @@
 
       <button
         type="button"
-        class="relative size-8 overflow-hidden b b-brand-green rounded-full transition-transform duration-500 hover:scale-110"
+        class="relative size-8 overflow-hidden b b-brand-green rounded-full bg-gray transition-transform duration-500 hover:scale-110"
         @click="() => isDropdownActive = !isDropdownActive"
       >
 
         <img
-          :src="instructor?.user_metadata.picture"
+          v-if="instructor?.user_metadata?.picture"
+          :src="instructor.user_metadata.picture"
           :alt="instructor?.email"
           class="size-full object-cover"
         >
-            
+
+        <p
+          v-else
+          class="size-full text-center text-xl uppercase"
+        >
+          {{ instructor?.user_metadata.name?.slice(0, 1) }}
+        </p>
       </button>
 
       <Transition
@@ -43,14 +50,22 @@
 
           <div class="flex items-start gap-2">
             <div
-              class="size-12 overflow-hidden rounded-full"
+              class="size-12 overflow-hidden b b-brand-green rounded-full bg-gray"
             >
 
               <img
-                :src="instructor?.user_metadata.picture"
+                v-if="instructor?.user_metadata?.picture"
+                :src="instructor.user_metadata.picture"
                 :alt="instructor?.email"
                 class="size-full object-cover"
               >
+
+              <p
+                v-else
+                class="size-full text-center text-4xl uppercase"
+              >
+                {{ instructor?.user_metadata.name?.slice(0, 1) }}
+              </p>
             
             </div>
             <div class="flex flex-col">

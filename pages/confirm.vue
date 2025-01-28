@@ -30,6 +30,16 @@
 const instructor = useSupabaseUser()
 const cookieName = useRuntimeConfig().public.supabase.cookieName
 const redirectPath = useCookie(`${cookieName}-redirect-path`).value
+const { token_hash, type } = useRoute().query as { token_hash: string, type: string }
+
+if (token_hash && type === 'magiclink') {
+  await useSupabaseClient().auth.verifyOtp(
+
+    { token_hash, type: 'magiclink' },
+  
+  )
+
+}
 
 watch(instructor, () => {
   if (instructor.value) {
