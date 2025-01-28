@@ -32,6 +32,10 @@ const cookieName = useRuntimeConfig().public.supabase.cookieName
 const redirectPath = useCookie(`${cookieName}-redirect-path`).value
 const { token_hash, type } = useRoute().query as { token_hash: string, type: string }
 
+useSeoMeta({
+  title: 'Confirm',
+})
+
 if (token_hash && type === 'magiclink') {
   await useSupabaseClient().auth.verifyOtp(
 
