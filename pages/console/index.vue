@@ -129,7 +129,7 @@
         </template>
 
         <template
-          v-if="status === 'pending' && assessments === null"
+          v-if="status === 'pending' && assessments === undefined"
           #loading
         >
 
@@ -199,4 +199,5 @@ onUnmounted(() => {
   client.removeChannel(assessmentChannel.value!)
   
 })
+
 </script>
