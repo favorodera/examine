@@ -10,7 +10,7 @@
         @click="copyAssessmentUrl"
       >
 
-        <h1 class="text-xl font-semibold">
+        <h1 class="text-start text-xl font-semibold">
           Access Code
         </h1>
         <p class="line-clamp-1 text-start text-lg font-medium">
