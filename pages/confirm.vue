@@ -41,17 +41,7 @@ if (token_hash && type) {
 
     { token_hash, type },
   
-  ).then(async () => {
-    if (type === 'signup') {
-      return await useAsyncData(
-        'create-instructor',
-        () => $fetch('/api/create-instructor', {
-          method: 'POST',
-          timeout: 30000,
-        }),
-      )
-    }
-  })
+  )
 
 }
 

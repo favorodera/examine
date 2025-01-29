@@ -86,7 +86,7 @@ useHead({
 })
 
 useSupabaseClient().auth.onAuthStateChange(
-  (event) => {
+  async (event) => {
     if (event === 'SIGNED_OUT') {
       createNotification(
         'Signed Out Successfully',
@@ -94,6 +94,16 @@ useSupabaseClient().auth.onAuthStateChange(
         2000,
         'success',
         () => navigateTo('/auth'),
+      )
+    }
+    else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+
+      await useAsyncData(
+        'create-instructor',
+        () => $fetch('/api/create-instructor', {
+          method: 'POST',
+          timeout: 30000,
+        }),
       )
     }
   })
