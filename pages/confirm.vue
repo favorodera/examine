@@ -30,18 +30,28 @@
 const instructor = useSupabaseUser()
 const cookieName = useRuntimeConfig().public.supabase.cookieName
 const redirectPath = useCookie(`${cookieName}-redirect-path`).value
-const { token_hash, type } = useRoute().query as { token_hash: string, type: string }
+const { token_hash, type } = useRoute().query as { token_hash: string, type: 'magiclink' | 'signup' }
 
 useSeoMeta({
   title: 'Confirm',
 })
 
-if (token_hash && type === 'magiclink') {
+if (token_hash && type) {
   await useSupabaseClient().auth.verifyOtp(
 
-    { token_hash, type: 'magiclink' },
+    { token_hash, type },
   
-  )
+  ).then(async () => {
+    if (type === 'signup') {
+      return await useAsyncData(
+        'create-instructor',
+        () => $fetch('/api/create-instructor', {
+          method: 'POST',
+          timeout: 30000,
+        }),
+      )
+    }
+  })
 
 }
 
