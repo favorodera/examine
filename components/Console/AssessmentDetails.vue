@@ -172,7 +172,7 @@
 
     </section>
 
-    <section class="shadowed mb-8 w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
+    <section class="shadowed w-full flex flex-col gap-3 rounded-3.5 bg-white p-8">
       
       <div class="w-full flex items-center justify-between gap-4">
 
@@ -262,6 +262,14 @@
 
     </section>
 
+    <button
+      type="button"
+      class="mb-8 self-end rounded-md bg-red-600 px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-red-500"
+      @click="useModals('assessmentDelete', 'open')"
+    >
+      Delete
+    </button>
+
   </template>
 
   <slot name="error" />
@@ -289,6 +297,7 @@
     </div>
   </template>
 
+  <ModalsAssessmentDeleteConfirmation :assessment-id="assessment?.assessment_id" />
 </template>
 
 <script setup lang="ts">
