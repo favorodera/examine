@@ -4,6 +4,7 @@ type ModalsState = {
   submitAssessment: boolean
   assessmentDelete: boolean
   ProfileUpdate: boolean
+  updateAssessment: boolean
 }
 
 type Notifications = {

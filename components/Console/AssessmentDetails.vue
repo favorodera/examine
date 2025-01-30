@@ -262,13 +262,37 @@
 
     </section>
 
-    <button
-      type="button"
-      class="mb-8 self-end rounded-md bg-red-600 px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-red-500"
-      @click="useModals('assessmentDelete', 'open')"
+    <div
+      v-if="assessment.status !== 'ongoing'"
+      class="mb-8 w-full flex items-center justify-end gap-4"
     >
-      Delete
-    </button>
+      <button
+        type="button"
+        class="rounded-md bg-brand-green px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-brand-green/70"
+        @click="useModals('updateAssessment', 'open')"
+      >
+        Update
+      </button>
+    
+      <button
+        type="button"
+        class="rounded-md bg-red-600 px-4 py-1 text-white font-medium transition-background-color duration-500 hover:bg-red-500"
+        @click="useModals('assessmentDelete', 'open')"
+      >
+        Delete
+      </button>
+    </div>
+
+    <ModalsUpdateAssessment
+      :assessment-details="{
+        id: assessment.assessment_id,
+        name: assessment.assessment_name,
+        dateTime: assessment.date_time,
+        durationMins: assessment.duration_mins,
+        marksObtainable: assessment.marks_obtainable,
+        passMark: assessment.pass_mark,
+      }"
+    />
 
   </template>
 
@@ -298,6 +322,7 @@
   </template>
 
   <ModalsAssessmentDeleteConfirmation :assessment-id="assessment?.assessment_id" />
+  
 </template>
 
 <script setup lang="ts">

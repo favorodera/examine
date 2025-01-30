@@ -98,7 +98,7 @@ const form = reactive({
 const client = useSupabaseClient()
         
 const { status, execute } = await useAsyncData(
-  'create-new-assessment',
+  'profile-update',
   () => $fetch('/api/create-instructor', {
     method: 'POST',
   }),
