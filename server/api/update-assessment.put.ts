@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
           duration_mins: durationMins,
           marks_obtainable: marksObtainable,
           pass_mark: passMark,
+          status: 'upcoming',
         },
       )
       .match({
