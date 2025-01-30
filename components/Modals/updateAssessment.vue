@@ -175,7 +175,7 @@ const dateTimeValidationMessage = ref<string>()
       
 const form = reactive({
   name: props.assessmentDetails.name,
-  dateTime: props.assessmentDetails.dateTime.split('+')[0].split('T')[0] + 'T' + props.assessmentDetails.dateTime.split('+')[0].split('T')[1],
+  dateTime: props.assessmentDetails.dateTime.split('+')[0].split('T')[0] + 'T' + props.assessmentDetails.dateTime.split('+')[0].split('T')[1].split(':')[0] + ':' + props.assessmentDetails.dateTime.split('+')[0].split('T')[1].split(':')[1],
   durationMins: props.assessmentDetails.durationMins,
   marksObtainable: props.assessmentDetails.marksObtainable,
   passMark: props.assessmentDetails.passMark,
