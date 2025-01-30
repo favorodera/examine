@@ -140,7 +140,7 @@
                 class="w-max flex flex-col items-center gap-2 rounded-2 bg-brand-green px-4 py-2 text-white font-normal duration-500 ease property-background-color disabled:cursor-not-allowed hover:bg-brand-green/70"
               >
                 <div class="flex items-center gap-2">
-                  {{ status === 'pending' ? 'Creating' : status === 'error' ? 'Retry': 'Submit' }}
+                  {{ status === 'pending' ? 'Updating' : status === 'error' ? 'Retry': 'Submit' }}
           
                   <span
                     :class="{
@@ -216,7 +216,7 @@ watch(status, async (newStatus) => {
     useModals('updateAssessment', 'close')
   
     createNotification(
-      'Assessment Created Successfully',
+      'Assessment Updated Successfully',
       'i-hugeicons:checkmark-circle-02',
       5000,
       'success',
@@ -224,7 +224,7 @@ watch(status, async (newStatus) => {
   }
   else if (newStatus === 'error') {
     createNotification(
-      'Error Creating Assessment',
+      'Error  Updating Assessment',
       'i-hugeicons:cross-circle-02',
       5000,
       'error',
