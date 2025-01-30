@@ -202,32 +202,35 @@ onUnmounted(() => {
   
 })
 
-watch(instructor, async () => {
+client.auth.onAuthStateChange(
+  async (event, session) => {
+    if (event !== 'SIGNED_OUT') {
+      if (session?.user.user_metadata.is_on_base && session?.user.user_metadata.name !== '') {
+        return
+      }
+      else if ((!session?.user.user_metadata.is_on_base || session?.user.user_metadata.is_on_base === false)
+        && (session?.user.user_metadata.name === '' || !session?.user.user_metadata.name)) {
+        useModals('ProfileUpdate', 'open')
+      }
+      else {
+        const { status } = useFetch(
+          '/api/create-instructor',
+          {
+            method: 'POST',
+            timeout: 30000,
+          },
+        )
 
-  if (instructor.value?.user_metadata.is_on_base && instructor.value?.user_metadata.name !== '') {
-    return
-  }
-  else if ((!instructor.value?.user_metadata.is_on_base || instructor.value?.user_metadata.is_on_base === false)
-    && (instructor.value?.user_metadata.name === '' || !instructor.value?.user_metadata.name)) {
-    useModals('ProfileUpdate', 'open')
-  }
-  else {
-    const { status } = await useAsyncData(
-      'create-instructor',
-      () => $fetch('/api/create-instructor', {
-        method: 'POST',
-        timeout: 30000,
-      }),
-    )
-    if (status.value === 'success') {
-      await client.auth.updateUser({
-        data: {
-          is_on_base: true,
-        },
-      })
+        if (status.value === 'success') {
+          await client.auth.updateUser({
+            data: {
+              is_on_base: true,
+            },
+          })
+        }
+      }
     }
-  }
-
-}, { deep: true, immediate: true })
+  
+  })
 
 </script>
