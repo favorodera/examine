@@ -202,6 +202,8 @@ onUnmounted(() => {
   
 })
 
+onBeforeUnmount(() => useModalsState().ProfileUpdate === false)
+
 client.auth.onAuthStateChange(
   async (event, session) => {
     if (event !== 'SIGNED_OUT') {
@@ -213,22 +215,17 @@ client.auth.onAuthStateChange(
         useModals('ProfileUpdate', 'open')
       }
       else {
-        const { status } = useFetch(
-          '/api/create-instructor',
-          {
-            method: 'POST',
-            timeout: 30000,
-          },
-        )
 
-        if (status.value === 'success') {
-          await client.auth.updateUser({
-            data: {
-              is_on_base: true,
-            },
+        await $fetch('/api/create-instructor', { method: 'POST', timeout: 3000 })
+          .then(async () => {
+            await client.auth.updateUser({
+              data: {
+                is_on_base: true,
+              },
+            })
           })
-        }
       }
+          
     }
   
   })
