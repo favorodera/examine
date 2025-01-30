@@ -6,10 +6,9 @@
 
     <NuxtPage />
 
-    <UtilsNotification />
-
   </main>
-
+  
+  <UtilsNotification />
 </template>
 
 <script setup lang="ts">
