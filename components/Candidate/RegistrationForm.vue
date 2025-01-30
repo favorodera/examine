@@ -301,6 +301,14 @@ watch(status, (newValue) => {
         'error',
       )
     }
+    else if (error.value?.statusMessage === 'Instructors cannot register') {
+      createNotification(
+        'Instructors cannot register',
+        'i-hugeicons:cancel-circle',
+        5000,
+        'error',
+      )
+    }
     else {
       createNotification(
         'Error Registering Candidate',
