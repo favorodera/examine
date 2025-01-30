@@ -152,17 +152,17 @@ export type Database = {
       instructors: {
         Row: {
           email: string
-          name: string | null
+          name: string
           user_id: string
         }
         Insert: {
           email: string
-          name?: string | null
+          name: string
           user_id?: string
         }
         Update: {
           email?: string
-          name?: string | null
+          name?: string
           user_id?: string
         }
         Relationships: []

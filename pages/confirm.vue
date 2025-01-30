@@ -31,13 +31,14 @@ const instructor = useSupabaseUser()
 const cookieName = useRuntimeConfig().public.supabase.cookieName
 const redirectPath = useCookie(`${cookieName}-redirect-path`).value
 const { token_hash, type } = useRoute().query as { token_hash: string, type: 'magiclink' | 'signup' }
+const client = useSupabaseClient()
 
 useSeoMeta({
   title: 'Confirm',
 })
 
 if (token_hash && type) {
-  await useSupabaseClient().auth.verifyOtp(
+  await client.auth.verifyOtp(
 
     { token_hash, type },
   
@@ -45,12 +46,13 @@ if (token_hash && type) {
 
 }
 
-watch(instructor, () => {
+watch(instructor, async () => {
   if (instructor.value) {
 
     useCookie(`${cookieName}-redirect-path`).value = null
 
-    return navigateTo(redirectPath || '/console')
+    navigateTo(redirectPath || '/console')
   }
+
 }, { deep: true, immediate: true })
 </script>

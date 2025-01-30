@@ -149,6 +149,8 @@
 
       <ModalsNewAssessment />
 
+      <ModalsProfileUpdate />
+
     </template>
 
   </Layout>
@@ -199,5 +201,33 @@ onUnmounted(() => {
   client.removeChannel(assessmentChannel.value!)
   
 })
+
+watch(instructor, async () => {
+
+  if (instructor.value?.user_metadata.is_on_base && instructor.value?.user_metadata.name !== '') {
+    return
+  }
+  else if ((!instructor.value?.user_metadata.is_on_base || instructor.value?.user_metadata.is_on_base === false)
+    && (instructor.value?.user_metadata.name === '' || !instructor.value?.user_metadata.name)) {
+    useModals('ProfileUpdate', 'open')
+  }
+  else {
+    const { status } = await useAsyncData(
+      'create-instructor',
+      () => $fetch('/api/create-instructor', {
+        method: 'POST',
+        timeout: 30000,
+      }),
+    )
+    if (status.value === 'success') {
+      await client.auth.updateUser({
+        data: {
+          is_on_base: true,
+        },
+      })
+    }
+  }
+
+}, { deep: true, immediate: true })
 
 </script>

@@ -3,7 +3,7 @@ export default async function () {
   await useSupabaseClient().auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'https://examine-app.vercel.app/confirm',
+      redirectTo: 'http://localhost:3000/confirm',
         
     },
   })
